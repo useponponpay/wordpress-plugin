@@ -1,0 +1,92 @@
+/**
+ * PonponPay WordPress Frontend Styles
+ */
+
+/* ===== 支付组件 ===== */
+.ponponpay-payment-widget {
+	max-width: 400px;
+	margin: 16px 0;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.ponponpay-widget-info {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	margin-bottom: 12px;
+}
+
+.ponponpay-amount {
+	font-size: 24px;
+	font-weight: 700;
+	color: #1a1a2e;
+}
+
+.ponponpay-desc {
+	font-size: 14px;
+	color: #666;
+}
+
+/* ===== 按钮 ===== */
+.ponponpay-btn {
+	display: inline-block;
+	width: 100%;
+	padding: 12px 24px;
+	border: none;
+	border-radius: 8px;
+	font-size: 16px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	text-align: center;
+}
+
+.ponponpay-btn-primary {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: #fff;
+}
+
+.ponponpay-btn-primary:hover {
+	opacity: 0.9;
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.ponponpay-btn-primary:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	transform: none;
+	box-shadow: none;
+}
+
+/* ===== 状态 ===== */
+.ponponpay-loading,
+.ponponpay-processing {
+	text-align: center;
+	padding: 20px;
+	color: #666;
+	font-size: 14px;
+}
+
+.ponponpay-error {
+	margin-top: 12px;
+	padding: 10px 14px;
+	background: #f8d7da;
+	border: 1px solid #f5c6cb;
+	border-radius: 6px;
+	color: #721c24;
+	font-size: 13px;
+}
+
+/* ===== WooCommerce 结账页兼容 ===== */
+.payment_method_ponponpay .payment_box {
+	background: #f8f9fa !important;
+	border-radius: 8px;
+	padding: 15px;
+}
+
+.payment_method_ponponpay .payment_box p {
+	margin: 0;
+	color: #495057;
+	font-size: 14px;
+}
