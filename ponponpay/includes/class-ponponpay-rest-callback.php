@@ -18,6 +18,11 @@ if (!defined('ABSPATH')) {
 class PonponPay_REST_Callback
 {
 	/**
+	 * 回调鉴权时间窗口（秒）
+	 */
+	const SIGNATURE_WINDOW_SECONDS = 300;
+
+	/**
 	 * 构造函数
 	 */
 	public function __construct()
@@ -231,6 +236,7 @@ class PonponPay_REST_Callback
 	 */
 	public function handle_callback($request)
 	{
+		$raw_body = $request->get_body();
 		$data = $request->get_json_params();
 		if (empty($data)) {
 			$data = $request->get_body_params();
@@ -242,13 +248,17 @@ class PonponPay_REST_Callback
 			return new WP_REST_Response('Missing required fields', 400);
 		}
 
-		// 验证 API Key
-		$received_key = $request->get_header('X-API-Key');
-		$expected_key = PonponPay_Settings::get_api_key();
-
-		if (empty($received_key) || $received_key !== $expected_key) {
-			$this->log('API Key validation failed');
-			return new WP_REST_Response('Unauthorized', 401);
+		$auth_result = $this->validate_signature_headers(
+			PonponPay_Settings::get_api_key(),
+			$request->get_header('X-Key-Prefix'),
+			$request->get_header('X-Timestamp'),
+			$request->get_header('X-Nonce'),
+			$request->get_header('X-Signature'),
+			$raw_body
+		);
+		if (is_wp_error($auth_result)) {
+			$this->log('Signature validation failed: ' . $auth_result->get_error_message());
+			return new WP_REST_Response($auth_result->get_error_message(), (int)($auth_result->get_error_data('status') ?: 401));
 		}
 
 		$order_no = sanitize_text_field($data['order_no']);
@@ -340,5 +350,84 @@ class PonponPay_REST_Callback
 		if (defined('WP_DEBUG') && WP_DEBUG) {
 			error_log('[PonponPay] ' . $message);
 		}
+	}
+
+	/**
+	 * 验证签名头与防重放。
+	 *
+	 * @param string $api_key API Key
+	 * @param string $prefix Header: X-Key-Prefix
+	 * @param string $timestamp Header: X-Timestamp
+	 * @param string $nonce Header: X-Nonce
+	 * @param string $signature Header: X-Signature
+	 * @param string $raw_body 原始请求体
+	 * @return true|WP_Error
+	 */
+	private function validate_signature_headers($api_key, $prefix, $timestamp, $nonce, $signature, $raw_body)
+	{
+		$api_key = trim((string)$api_key);
+		$prefix = trim((string)$prefix);
+		$timestamp = trim((string)$timestamp);
+		$nonce = trim((string)$nonce);
+		$signature = strtolower(trim((string)$signature));
+
+		if ($api_key === '') {
+			return new WP_Error('ponponpay_auth_error', 'Gateway API key not configured', ['status' => 500]);
+		}
+
+		if ($prefix === '' || $timestamp === '' || $nonce === '' || $signature === '') {
+			return new WP_Error('ponponpay_auth_error', 'Missing signature headers', ['status' => 401]);
+		}
+
+		if (!ctype_digit($timestamp)) {
+			return new WP_Error('ponponpay_auth_error', 'Invalid timestamp', ['status' => 401]);
+		}
+
+		$now = time();
+		$ts = (int)$timestamp;
+		if (abs($now - $ts) > self::SIGNATURE_WINDOW_SECONDS) {
+			return new WP_Error('ponponpay_auth_error', 'Timestamp expired', ['status' => 401]);
+		}
+
+		$expected_prefix = substr($api_key, 0, 12);
+		if ($prefix !== $expected_prefix) {
+			return new WP_Error('ponponpay_auth_error', 'Invalid key prefix', ['status' => 401]);
+		}
+
+		if (!$this->consume_nonce($timestamp, $nonce)) {
+			return new WP_Error('ponponpay_auth_error', 'Nonce already used', ['status' => 409]);
+		}
+
+		$key_hash = hash('sha256', $api_key);
+		$payload = $timestamp . "\n" . $nonce . "\n" . $raw_body;
+		$expected_signature = hash_hmac('sha256', $payload, $key_hash);
+
+		if (!hash_equals($expected_signature, $signature)) {
+			return new WP_Error('ponponpay_auth_error', 'Invalid signature', ['status' => 401]);
+		}
+
+		return true;
+	}
+
+	/**
+	 * 消费 nonce，防重放。
+	 *
+	 * @param string $timestamp 时间戳
+	 * @param string $nonce 随机串
+	 * @return bool
+	 */
+	private function consume_nonce($timestamp, $nonce)
+	{
+		if (!preg_match('/^[A-Za-z0-9]{16,128}$/', $nonce)) {
+			return false;
+		}
+
+		$key = 'ponponpay_nonce_' . hash('sha256', $timestamp . '|' . $nonce);
+		if (get_transient($key)) {
+			return false;
+		}
+
+		set_transient($key, 1, 10 * MINUTE_IN_SECONDS);
+		return true;
 	}
 }
