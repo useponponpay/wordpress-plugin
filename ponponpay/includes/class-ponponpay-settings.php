@@ -240,19 +240,41 @@ class PonponPay_Settings
 			$validated = true;
 			$api = new PonponPay_API($sanitized['api_key']);
 			$result = $api->activate_plugin();
+			$debug_context = $api->get_last_debug_context();
+			$log_file = PonponPay_API::get_debug_log_file();
 
 			if (is_wp_error($result)) {
+				$this->log_api_key_validation_failure('wp_error', [
+					'error_code' => $result->get_error_code(),
+					'error_message' => $result->get_error_message(),
+					'error_data' => $result->get_error_data(),
+					'debug_context' => $debug_context,
+				]);
 				add_settings_error(
 					'ponponpay_messages',
 					'ponponpay_api_error',
-					__('PonponPay API connection failed: ', 'ponponpay') . $result->get_error_message(),
+					__('PonponPay API connection failed: ', 'ponponpay') . $result->get_error_message() . ' ' .
+						sprintf(
+							/* translators: %s: debug log file path */
+							__('(Debug log: %s)', 'ponponpay'),
+							$log_file
+						),
 					'error'
 				);
 			} elseif (!isset($result['code']) || $result['code'] != 0) {
+				$this->log_api_key_validation_failure('business_error', [
+					'result' => $result,
+					'debug_context' => $debug_context,
+				]);
 				add_settings_error(
 					'ponponpay_messages',
 					'ponponpay_activation_error',
-					__('Plugin activation failed: ', 'ponponpay') . ($result['message'] ?? 'Unknown error'),
+					__('Plugin activation failed: ', 'ponponpay') . ($result['message'] ?? 'Unknown error') . ' ' .
+						sprintf(
+							/* translators: %s: debug log file path */
+							__('(Debug log: %s)', 'ponponpay'),
+							$log_file
+						),
 					'error'
 				);
 			} else {
@@ -266,6 +288,24 @@ class PonponPay_Settings
 		}
 
 		return $sanitized;
+	}
+
+	/**
+	 * 记录 API Key 校验失败日志
+	 *
+	 * @param string $type    失败类型
+	 * @param array  $payload 上下文数据
+	 * @return void
+	 */
+	private function log_api_key_validation_failure($type, $payload)
+	{
+		$log_line = [
+			'time' => date('c'),
+			'type' => $type,
+			'payload' => $payload,
+		];
+		$encoded = wp_json_encode($log_line, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+		file_put_contents(PonponPay_API::get_debug_log_file(), $encoded . PHP_EOL, FILE_APPEND);
 	}
 
 	/**

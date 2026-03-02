@@ -31,6 +31,7 @@ if (!defined('PONPONPAY_PLUGIN_URL')) {
 if (!defined('PONPONPAY_API_URL')) {
 	// 默认使用生产 API，可通过常量或 filter 覆盖，这里为了测试阶段改为本地
 	define('PONPONPAY_API_URL', apply_filters('ponponpay_api_url', 'https://api.ponponpay.com'));
+	// define('PONPONPAY_API_URL', apply_filters('ponponpay_api_url', 'http://localhost:11050'));
 }
 
 /**

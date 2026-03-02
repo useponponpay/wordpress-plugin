@@ -23,6 +23,9 @@ class PonponPay_API
 	/** @var int 请求超时时间（秒） */
 	private $timeout;
 
+	/** @var array 最近一次请求调试上下文 */
+	private $last_debug_context = [];
+
 	/**
 	 * 构造函数
 	 *
@@ -90,6 +93,26 @@ class PonponPay_API
 	}
 
 	/**
+	 * 获取日志文件路径
+	 *
+	 * @return string
+	 */
+	public static function get_debug_log_file()
+	{
+		return '/tmp/ponponpay-debug.log';
+	}
+
+	/**
+	 * 获取最近一次请求调试上下文
+	 *
+	 * @return array
+	 */
+	public function get_last_debug_context()
+	{
+		return $this->last_debug_context;
+	}
+
+	/**
 	 * 发送 API 请求
 	 *
 	 * @param string $endpoint API 端点
@@ -99,6 +122,7 @@ class PonponPay_API
 	private function request($endpoint, $data = [])
 	{
 		$url = rtrim($this->api_url, '/') . $endpoint;
+		$request_id = wp_generate_uuid4();
 
 		$args = [
 			'method' => 'POST',
@@ -111,35 +135,78 @@ class PonponPay_API
 			'body' => wp_json_encode($data),
 		];
 
-		// 调试日志 - 写入文件
-		$log = date('Y-m-d H:i:s') . " Request URL: {$url}\n";
-		$log .= "API Key: " . substr($this->api_key, 0, 8) . "...\n";
-		$log .= "Request Body: " . wp_json_encode($data) . "\n";
-		file_put_contents('/tmp/ponponpay-debug.log', $log, FILE_APPEND);
+		$this->last_debug_context = [
+			'request_id' => $request_id,
+			'endpoint' => $endpoint,
+			'url' => $url,
+			'timeout' => $this->timeout,
+			'request_body' => $data,
+			'api_key_prefix' => substr((string)$this->api_key, 0, 12),
+		];
+		$this->write_debug_log("[$request_id] Request URL: {$url}");
+		$this->write_debug_log("[$request_id] API Key Prefix: " . substr($this->api_key, 0, 12) . '...');
+		$this->write_debug_log("[$request_id] Request Body: " . wp_json_encode($data));
 
 		$response = wp_remote_post($url, $args);
 
 		if (is_wp_error($response)) {
-			file_put_contents('/tmp/ponponpay-debug.log', "WP Error: " . $response->get_error_message() . "\n\n", FILE_APPEND);
+			$this->last_debug_context['wp_error_code'] = $response->get_error_code();
+			$this->last_debug_context['wp_error_message'] = $response->get_error_message();
+			$this->last_debug_context['wp_error_data'] = $response->get_error_data();
+			$this->write_debug_log("[$request_id] WP Error Code: " . $response->get_error_code());
+			$this->write_debug_log("[$request_id] WP Error Message: " . $response->get_error_message());
+			$this->write_debug_log("[$request_id] WP Error Data: " . wp_json_encode($response->get_error_data()));
+			$this->write_debug_log('');
 			return $response;
 		}
 
 		$http_code = wp_remote_retrieve_response_code($response);
 		$body = wp_remote_retrieve_body($response);
+		$response_message = wp_remote_retrieve_response_message($response);
+		$response_headers = wp_remote_retrieve_headers($response);
 
-		file_put_contents('/tmp/ponponpay-debug.log', "HTTP Code: {$http_code}\nResponse: {$body}\n\n", FILE_APPEND);
+		$this->last_debug_context['http_code'] = $http_code;
+		$this->last_debug_context['http_message'] = $response_message;
+		$this->last_debug_context['response_headers'] = $response_headers;
+		$this->last_debug_context['response_body'] = $body;
+		$this->write_debug_log("[$request_id] HTTP Code: {$http_code}");
+		$this->write_debug_log("[$request_id] HTTP Message: {$response_message}");
+		$this->write_debug_log("[$request_id] Response Headers: " . wp_json_encode($response_headers));
+		$this->write_debug_log("[$request_id] Response Body: {$body}");
 
 		$decoded = json_decode($body, true);
+		$this->last_debug_context['decoded'] = $decoded;
+		$this->last_debug_context['json_error'] = json_last_error();
+		$this->last_debug_context['json_error_message'] = json_last_error_msg();
 
 		if ($http_code !== 200) {
 			$error_msg = $decoded['message'] ?? 'HTTP Error ' . $http_code;
+			$this->write_debug_log("[$request_id] API Error: {$error_msg}");
+			$this->write_debug_log('');
 			return new WP_Error('ponponpay_api_error', $error_msg, ['status' => $http_code]);
 		}
 
 		if (json_last_error() !== JSON_ERROR_NONE) {
+			$this->write_debug_log("[$request_id] JSON Decode Error: " . json_last_error_msg());
+			$this->write_debug_log('');
 			return new WP_Error('ponponpay_json_error', 'Invalid JSON response');
 		}
 
+		$this->write_debug_log("[$request_id] API Response Code: " . ($decoded['code'] ?? 'null'));
+		$this->write_debug_log("[$request_id] API Response Message: " . ($decoded['message'] ?? ''));
+		$this->write_debug_log('');
 		return $decoded;
+	}
+
+	/**
+	 * 写调试日志
+	 *
+	 * @param string $message 日志内容
+	 * @return void
+	 */
+	private function write_debug_log($message)
+	{
+		$line = date('Y-m-d H:i:s') . ' ' . $message . PHP_EOL;
+		file_put_contents(self::get_debug_log_file(), $line, FILE_APPEND);
 	}
 }

@@ -254,17 +254,14 @@ if (!$payment) {
 		// 检查是否已经标记了 payment_url（说明已经创建过后台订单）
 		$existing_payment_url = $wc_order->get_meta('_ponponpay_payment_url');
 		if ($existing_payment_url) {
-			wp_redirect($existing_payment_url);
-			exit;
+			// 保持在当前收银台页面，由用户手动点击确认支付。
 		}
 	} else {
 		wp_die(esc_html($i18n['order_not_found']));
 	}
 } else {
 	if ($payment->status > 0 && !empty($payment->payment_url)) {
-		// 已支付或已有 payment_url
-		wp_redirect($payment->payment_url);
-		exit;
+		// 已有 payment_url 时也不自动跳转，保持当前页面交互。
 	}
 	$amount = $payment->amount;
 	$fiat_currency = $payment->fiat_currency;
@@ -905,7 +902,8 @@ $nonce = wp_create_nonce('wp_rest');
 					.then(res => res.json())
 					.then(data => {
 						if (data.success && data.payment_url) {
-							window.location.href = data.payment_url;
+							const payWindow = window.open(data.payment_url, '_blank', 'noopener,noreferrer');
+							loadingOverlay.style.display = 'none';
 						} else {
 							showError(data.error || i18n.failed_create_order);
 						}
