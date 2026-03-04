@@ -88,7 +88,7 @@ class PonponPay_API
 	public function activate_plugin()
 	{
 		return $this->request('/api/v1/pay/sdk/plugin/activate', [
-			'plugin_type' => 'woocommerce',
+			'plugin_type' => 'wordpress',
 		]);
 	}
 
