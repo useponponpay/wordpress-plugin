@@ -35,8 +35,8 @@ class PonponPay_Settings
 	public function add_settings_page()
 	{
 		add_options_page(
-			__('PonponPay Settings', 'ponponpay'),
-			__('PonponPay', 'ponponpay'),
+			__('PonponPay Settings', 'ponponpay-crypto-payment-gateway'),
+			__('PonponPay', 'ponponpay-crypto-payment-gateway'),
 			'manage_options',
 			'ponponpay',
 			[$this, 'render_settings_page']
@@ -55,9 +55,9 @@ class PonponPay_Settings
 		// API 配置段
 		add_settings_section(
 			'ponponpay_api_section',
-			__('API Configuration', 'ponponpay'),
+			__('API Configuration', 'ponponpay-crypto-payment-gateway'),
 			function () {
-				echo '<p>' . esc_html__('Configure your PonponPay API credentials. Get your API Key from', 'ponponpay')
+				echo '<p>' . esc_html__('Configure your PonponPay API credentials. Get your API Key from', 'ponponpay-crypto-payment-gateway')
 					. ' <a href="https://ponponpay.com" target="_blank">ponponpay.com</a></p>';
 			},
 			'ponponpay'
@@ -65,7 +65,7 @@ class PonponPay_Settings
 
 		add_settings_field(
 			'api_key',
-			__('API Key', 'ponponpay'),
+			__('API Key', 'ponponpay-crypto-payment-gateway'),
 			[$this, 'render_api_key_field'],
 			'ponponpay',
 			'ponponpay_api_section'
@@ -74,7 +74,7 @@ class PonponPay_Settings
 		// 短代码使用说明段
 		add_settings_section(
 			'ponponpay_shortcode_section',
-			__('Shortcode Usage', 'ponponpay'),
+			__('Shortcode Usage', 'ponponpay-crypto-payment-gateway'),
 			[$this, 'render_shortcode_help'],
 			'ponponpay'
 		);
@@ -89,12 +89,12 @@ class PonponPay_Settings
 		$api_key = $options['api_key'] ?? '';
 		?>
 		<input type="text" name="<?php echo esc_attr($this->option_name); ?>[api_key]" value="<?php echo esc_attr($api_key); ?>"
-			class="regular-text" placeholder="<?php esc_attr_e('Enter your PonponPay API Key', 'ponponpay'); ?>" />
+			class="regular-text" placeholder="<?php esc_attr_e('Enter your PonponPay API Key', 'ponponpay-crypto-payment-gateway'); ?>" />
 		<p class="description">
 			<?php
 			printf(
 				/* translators: %s: callback URL */
-				esc_html__('Callback URL: %s', 'ponponpay'),
+				esc_html__('Callback URL: %s', 'ponponpay-crypto-payment-gateway'),
 				'<code>' . esc_html(rest_url('ponponpay/v1/callback')) . '</code>'
 			);
 			?>
@@ -110,32 +110,32 @@ class PonponPay_Settings
 		?>
 		<div style="background:#f9f9f9;border:1px solid #ddd;border-radius:6px;padding:16px;max-width:700px;">
 			<h4 style="margin-top:0;">
-				<?php esc_html_e('Basic Usage', 'ponponpay'); ?>
+				<?php esc_html_e('Basic Usage', 'ponponpay-crypto-payment-gateway'); ?>
 			</h4>
 			<code>[ponponpay_button amount="100"]</code>
 
 			<h4>
-				<?php esc_html_e('Full Parameters', 'ponponpay'); ?>
+				<?php esc_html_e('Full Parameters', 'ponponpay-crypto-payment-gateway'); ?>
 			</h4>
 			<code>[ponponpay_button amount="99.99" fiat_currency="USD" description="Premium Plan" button_text="Pay with Crypto" redirect_url="https://example.com/thank-you"]</code>
 
 			<h4>
-				<?php esc_html_e('Parameters', 'ponponpay'); ?>
+				<?php esc_html_e('Parameters', 'ponponpay-crypto-payment-gateway'); ?>
 			</h4>
 			<table class="widefat" style="max-width:700px;">
 				<thead>
 					<tr>
 						<th>
-							<?php esc_html_e('Parameter', 'ponponpay'); ?>
+							<?php esc_html_e('Parameter', 'ponponpay-crypto-payment-gateway'); ?>
 						</th>
 						<th>
-							<?php esc_html_e('Required', 'ponponpay'); ?>
+							<?php esc_html_e('Required', 'ponponpay-crypto-payment-gateway'); ?>
 						</th>
 						<th>
-							<?php esc_html_e('Default', 'ponponpay'); ?>
+							<?php esc_html_e('Default', 'ponponpay-crypto-payment-gateway'); ?>
 						</th>
 						<th>
-							<?php esc_html_e('Description', 'ponponpay'); ?>
+							<?php esc_html_e('Description', 'ponponpay-crypto-payment-gateway'); ?>
 						</th>
 					</tr>
 				</thead>
@@ -145,7 +145,7 @@ class PonponPay_Settings
 						<td>✅</td>
 						<td>—</td>
 						<td>
-							<?php esc_html_e('Payment amount', 'ponponpay'); ?>
+							<?php esc_html_e('Payment amount', 'ponponpay-crypto-payment-gateway'); ?>
 						</td>
 					</tr>
 					<tr>
@@ -153,7 +153,7 @@ class PonponPay_Settings
 						<td>❌</td>
 						<td>USD</td>
 						<td>
-							<?php esc_html_e('Fiat currency code', 'ponponpay'); ?>
+							<?php esc_html_e('Fiat currency code', 'ponponpay-crypto-payment-gateway'); ?>
 						</td>
 					</tr>
 					<tr>
@@ -161,7 +161,7 @@ class PonponPay_Settings
 						<td>❌</td>
 						<td>—</td>
 						<td>
-							<?php esc_html_e('Payment description', 'ponponpay'); ?>
+							<?php esc_html_e('Payment description', 'ponponpay-crypto-payment-gateway'); ?>
 						</td>
 					</tr>
 					<tr>
@@ -169,7 +169,7 @@ class PonponPay_Settings
 						<td>❌</td>
 						<td>Pay with Crypto</td>
 						<td>
-							<?php esc_html_e('Button label', 'ponponpay'); ?>
+							<?php esc_html_e('Button label', 'ponponpay-crypto-payment-gateway'); ?>
 						</td>
 					</tr>
 					<tr>
@@ -177,7 +177,7 @@ class PonponPay_Settings
 						<td>❌</td>
 						<td>—</td>
 						<td>
-							<?php esc_html_e('URL to redirect after payment', 'ponponpay'); ?>
+							<?php esc_html_e('URL to redirect after payment', 'ponponpay-crypto-payment-gateway'); ?>
 						</td>
 					</tr>
 				</tbody>
@@ -198,14 +198,14 @@ class PonponPay_Settings
 		?>
 		<div class="wrap">
 			<h1>
-				<?php esc_html_e('PonponPay Settings', 'ponponpay'); ?>
+				<?php esc_html_e('PonponPay Settings', 'ponponpay-crypto-payment-gateway'); ?>
 			</h1>
 
 			<?php if (class_exists('WooCommerce')): ?>
 				<div class="notice notice-info">
 					<p>
 						✅
-						<?php esc_html_e('WooCommerce detected! PonponPay is available as a payment gateway in WooCommerce → Settings → Payments.', 'ponponpay'); ?>
+						<?php esc_html_e('WooCommerce detected! PonponPay is available as a payment gateway in WooCommerce → Settings → Payments.', 'ponponpay-crypto-payment-gateway'); ?>
 					</p>
 				</div>
 			<?php endif; ?>
@@ -253,10 +253,10 @@ class PonponPay_Settings
 				add_settings_error(
 					'ponponpay_messages',
 					'ponponpay_api_error',
-					__('PonponPay API connection failed: ', 'ponponpay') . $result->get_error_message() . ' ' .
+					__('PonponPay API connection failed: ', 'ponponpay-crypto-payment-gateway') . $result->get_error_message() . ' ' .
 						sprintf(
 							/* translators: %s: debug log file path */
-							__('(Debug log: %s)', 'ponponpay'),
+							__('(Debug log: %s)', 'ponponpay-crypto-payment-gateway'),
 							$log_file
 						),
 					'error'
@@ -269,10 +269,10 @@ class PonponPay_Settings
 				add_settings_error(
 					'ponponpay_messages',
 					'ponponpay_activation_error',
-					__('Plugin activation failed: ', 'ponponpay') . ($result['message'] ?? 'Unknown error') . ' ' .
+					__('Plugin activation failed: ', 'ponponpay-crypto-payment-gateway') . ($result['message'] ?? 'Unknown error') . ' ' .
 						sprintf(
 							/* translators: %s: debug log file path */
-							__('(Debug log: %s)', 'ponponpay'),
+							__('(Debug log: %s)', 'ponponpay-crypto-payment-gateway'),
 							$log_file
 						),
 					'error'
@@ -281,7 +281,7 @@ class PonponPay_Settings
 				add_settings_error(
 					'ponponpay_messages',
 					'ponponpay_success',
-					__('API Key verified successfully!', 'ponponpay'),
+					__('API Key verified successfully!', 'ponponpay-crypto-payment-gateway'),
 					'success'
 				);
 			}
@@ -300,7 +300,7 @@ class PonponPay_Settings
 	private function log_api_key_validation_failure($type, $payload)
 	{
 		$log_line = [
-			'time' => date('c'),
+			'time' => gmdate('c'),
 			'type' => $type,
 			'payload' => $payload,
 		];

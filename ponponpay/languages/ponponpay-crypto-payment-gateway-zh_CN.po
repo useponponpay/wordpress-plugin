@@ -1,0 +1,219 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PonponPay - Crypto Payment Gateway 1.0.0\n"
+"POT-Creation-Date: 2026-03-09 14:28+0800\n"
+"PO-Revision-Date: 2026-03-09 14:28+0800\n"
+"Last-Translator: PonponPay <support@ponponpay.com>\n"
+"Language-Team: Chinese (Simplified)\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "(Debug log: %s)"
+msgstr "（调试日志：%s）"
+
+msgid "API Configuration"
+msgstr "API 配置"
+
+msgid "API Key"
+msgstr "API Key"
+
+msgid "API Key verified successfully!"
+msgstr "API Key 验证成功！"
+
+msgid "Accept cryptocurrency payments (USDT, USDC, etc.) via PonponPay. Supports Tron, Ethereum, BSC, Polygon, Solana networks."
+msgstr "通过 PonponPay 接受加密货币支付（USDT、USDC 等）。支持 Tron、Ethereum、BSC、Polygon、Solana 网络。"
+
+msgid "Awaiting PonponPay crypto payment."
+msgstr "等待 PonponPay 加密货币支付。"
+
+msgid "Basic Usage"
+msgstr "基本用法"
+
+msgid "Button label"
+msgstr "按钮文案"
+
+msgid "Callback URL: %s"
+msgstr "回调地址：%s"
+
+msgid "Configure your PonponPay API credentials. Get your API Key from"
+msgstr "在此配置你的 PonponPay API 凭证。API Key 获取地址："
+
+msgid "Crypto Payment (PonponPay)"
+msgstr "加密货币支付（PonponPay）"
+
+msgid "Currency:"
+msgstr "币种："
+
+msgid "Default"
+msgstr "默认值"
+
+msgid "Description"
+msgstr "描述"
+
+msgid "Enable PonponPay Crypto Payment"
+msgstr "启用 PonponPay 加密货币支付"
+
+msgid "Enable/Disable"
+msgstr "启用/禁用"
+
+msgid "Enter your PonponPay API Key"
+msgstr "输入你的 PonponPay API Key"
+
+msgid "Enter your PonponPay API Key. Get it from %s."
+msgstr "输入你的 PonponPay API Key。可从 %s 获取。"
+
+msgid "Failed to initialize payment"
+msgstr "初始化支付失败"
+
+msgid "Fiat currency code"
+msgstr "法币代码"
+
+msgid "Full Parameters"
+msgstr "完整参数"
+
+msgid "Initializing payment..."
+msgstr "正在初始化支付..."
+
+msgid "Network error. Please try again."
+msgstr "网络错误。请重试。"
+
+msgid "Network:"
+msgstr "网络："
+
+msgid "Parameter"
+msgstr "参数"
+
+msgid "Parameters"
+msgstr "参数说明"
+
+msgid "Pay with Crypto"
+msgstr "使用加密货币支付"
+
+msgid "Pay with USDT, USDC and other cryptocurrencies via PonponPay."
+msgstr "通过 PonponPay 使用 USDT、USDC 和其他加密货币支付。"
+
+msgid "Pay with USDT, USDC and other cryptocurrencies. Supports Tron, Ethereum, BSC, Polygon, Solana networks."
+msgstr "使用 USDT、USDC 和其他加密货币支付。支持 Tron、Ethereum、BSC、Polygon、Solana 网络。"
+
+msgid "Payment amount"
+msgstr "支付金额"
+
+msgid "Payment description"
+msgstr "支付描述"
+
+msgid "Payment method description displayed to customers at checkout."
+msgstr "在结账页向客户显示的支付方式描述。"
+
+msgid "Payment method title displayed to customers at checkout."
+msgstr "在结账页向客户显示的支付方式标题。"
+
+msgid "Plugin activation failed: "
+msgstr "插件激活失败："
+
+msgid "PonponPay"
+msgstr "PonponPay"
+
+msgid "PonponPay - Crypto Payment"
+msgstr "PonponPay - 加密货币支付"
+
+msgid "PonponPay API Key verified successfully!"
+msgstr "PonponPay API Key 验证成功！"
+
+msgid "PonponPay API connection failed: "
+msgstr "PonponPay API 连接失败："
+
+msgid "PonponPay Settings"
+msgstr "PonponPay 设置"
+
+msgid "PonponPay Trade ID:"
+msgstr "PonponPay 交易 ID："
+
+msgid "PonponPay is not properly configured. Please contact the store administrator."
+msgstr "PonponPay 未正确配置，请联系商店管理员。"
+
+msgid "PonponPay payment completed. Transaction: %1$s, Currency: %2$s, Network: %3$s"
+msgstr "PonponPay 支付已完成。交易：%1$s，币种：%2$s，网络：%3$s"
+
+msgid "PonponPay plugin activation failed: "
+msgstr "PonponPay 插件激活失败："
+
+msgid "PonponPay: Payment cancelled."
+msgstr "PonponPay：支付已取消。"
+
+msgid "PonponPay: Payment expired."
+msgstr "PonponPay：支付已过期。"
+
+msgid "Required"
+msgstr "必填"
+
+msgid "Settings"
+msgstr "设置"
+
+msgid "Shortcode Usage"
+msgstr "短代码用法"
+
+msgid "Title"
+msgstr "标题"
+
+msgid "URL to redirect after payment"
+msgstr "支付后跳转地址"
+
+msgid "Unknown error"
+msgstr "未知错误"
+
+msgid "WooCommerce detected! PonponPay is available as a payment gateway in WooCommerce → Settings → Payments."
+msgstr "检测到 WooCommerce！PonponPay 已作为支付网关可用于 WooCommerce → Settings → Payments。"
+
+msgid "[PonponPay] Error: API Key not configured. Go to Settings → PonponPay."
+msgstr "[PonponPay] 错误：未配置 API Key。请前往 Settings → PonponPay。"
+
+msgid "[PonponPay] Error: amount parameter is required."
+msgstr "[PonponPay] 错误：amount 参数为必填。"
+
+msgid "Invalid request"
+msgstr "无效请求"
+
+msgid "Order not found"
+msgstr "订单不存在"
+
+msgid "PonponPay Checkout"
+msgstr "PonponPay 收银台"
+
+msgid "Selected"
+msgstr "已选择"
+
+msgid "Select Payment Method"
+msgstr "选择支付方式"
+
+msgid "Loading methods..."
+msgstr "正在加载支付方式..."
+
+msgid "Confirm & Pay"
+msgstr "确认并支付"
+
+msgid "Cancel and return"
+msgstr "取消并返回"
+
+msgid "Processing..."
+msgstr "处理中..."
+
+msgid "Secured by"
+msgstr "安全支持"
+
+msgid "No payment methods available"
+msgstr "暂无可用支付方式"
+
+msgid "No payment methods available. Contact administrator."
+msgstr "暂无可用支付方式，请联系管理员。"
+
+msgid "Network error while loading methods."
+msgstr "加载支付方式时发生网络错误。"
+
+msgid "Failed to create order"
+msgstr "创建订单失败"
+
+msgid "Network error while creating order."
+msgstr "创建订单时发生网络错误。"

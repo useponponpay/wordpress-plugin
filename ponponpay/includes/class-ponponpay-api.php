@@ -206,7 +206,7 @@ class PonponPay_API
 	 */
 	private function write_debug_log($message)
 	{
-		$line = date('Y-m-d H:i:s') . ' ' . $message . PHP_EOL;
+		$line = gmdate('Y-m-d H:i:s') . ' ' . $message . PHP_EOL;
 		file_put_contents(self::get_debug_log_file(), $line, FILE_APPEND);
 	}
 }

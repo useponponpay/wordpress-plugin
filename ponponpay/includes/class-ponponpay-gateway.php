@@ -28,8 +28,8 @@ class PonponPay_Gateway extends WC_Payment_Gateway
 			$this->icon = '';
 		}
 		$this->has_fields = false;
-		$this->method_title = __('PonponPay - Crypto Payment', 'ponponpay-woocommerce');
-		$this->method_description = __('Accept cryptocurrency payments (USDT, USDC, etc.) via PonponPay. Supports Tron, Ethereum, BSC, Polygon, Solana networks.', 'ponponpay-woocommerce');
+		$this->method_title = __('PonponPay - Crypto Payment', 'ponponpay-crypto-payment-gateway');
+		$this->method_description = __('Accept cryptocurrency payments (USDT, USDC, etc.) via PonponPay. Supports Tron, Ethereum, BSC, Polygon, Solana networks.', 'ponponpay-crypto-payment-gateway');
 		$this->supports = ['products'];
 
 		// 加载设置
@@ -37,8 +37,8 @@ class PonponPay_Gateway extends WC_Payment_Gateway
 		$this->init_settings();
 
 		// 用户配置
-		$this->title = $this->get_option('title', __('Crypto Payment (PonponPay)', 'ponponpay-woocommerce'));
-		$this->description = $this->get_option('description', __('Pay with USDT, USDC and other cryptocurrencies via PonponPay.', 'ponponpay-woocommerce'));
+		$this->title = $this->get_option('title', __('Crypto Payment (PonponPay)', 'ponponpay-crypto-payment-gateway'));
+		$this->description = $this->get_option('description', __('Pay with USDT, USDC and other cryptocurrencies via PonponPay.', 'ponponpay-crypto-payment-gateway'));
 		$this->enabled = $this->get_option('enabled', 'no');
 
 		// 初始化 API 客户端
@@ -59,31 +59,31 @@ class PonponPay_Gateway extends WC_Payment_Gateway
 	{
 		$this->form_fields = [
 			'enabled' => [
-				'title' => __('Enable/Disable', 'ponponpay-woocommerce'),
+				'title' => __('Enable/Disable', 'ponponpay-crypto-payment-gateway'),
 				'type' => 'checkbox',
-				'label' => __('Enable PonponPay Crypto Payment', 'ponponpay-woocommerce'),
+				'label' => __('Enable PonponPay Crypto Payment', 'ponponpay-crypto-payment-gateway'),
 				'default' => 'no',
 			],
 			'title' => [
-				'title' => __('Title', 'ponponpay-woocommerce'),
+				'title' => __('Title', 'ponponpay-crypto-payment-gateway'),
 				'type' => 'text',
-				'description' => __('Payment method title displayed to customers at checkout.', 'ponponpay-woocommerce'),
-				'default' => __('Crypto Payment (PonponPay)', 'ponponpay-woocommerce'),
+				'description' => __('Payment method title displayed to customers at checkout.', 'ponponpay-crypto-payment-gateway'),
+				'default' => __('Crypto Payment (PonponPay)', 'ponponpay-crypto-payment-gateway'),
 				'desc_tip' => true,
 			],
 			'description' => [
-				'title' => __('Description', 'ponponpay-woocommerce'),
+				'title' => __('Description', 'ponponpay-crypto-payment-gateway'),
 				'type' => 'textarea',
-				'description' => __('Payment method description displayed to customers at checkout.', 'ponponpay-woocommerce'),
-				'default' => __('Pay with USDT, USDC and other cryptocurrencies. Supports Tron, Ethereum, BSC, Polygon, Solana networks.', 'ponponpay-woocommerce'),
+				'description' => __('Payment method description displayed to customers at checkout.', 'ponponpay-crypto-payment-gateway'),
+				'default' => __('Pay with USDT, USDC and other cryptocurrencies. Supports Tron, Ethereum, BSC, Polygon, Solana networks.', 'ponponpay-crypto-payment-gateway'),
 				'desc_tip' => true,
 			],
 			'api_key' => [
-				'title' => __('API Key', 'ponponpay-woocommerce'),
+				'title' => __('API Key', 'ponponpay-crypto-payment-gateway'),
 				'type' => 'text',
 				'description' => sprintf(
 					/* translators: %s: PonponPay console URL */
-					__('Enter your PonponPay API Key. Get it from %s.', 'ponponpay-woocommerce'),
+					__('Enter your PonponPay API Key. Get it from %s.', 'ponponpay-crypto-payment-gateway'),
 					'<a href="https://ponponpay.com" target="_blank">ponponpay.com</a>'
 				),
 				'default' => '',
@@ -106,20 +106,20 @@ class PonponPay_Gateway extends WC_Payment_Gateway
 
 		if (is_wp_error($result)) {
 			WC_Admin_Settings::add_error(
-				__('PonponPay API connection failed: ', 'ponponpay-woocommerce') . $result->get_error_message()
+				__('PonponPay API connection failed: ', 'ponponpay-crypto-payment-gateway') . $result->get_error_message()
 			);
 			return;
 		}
 
 		if (!isset($result['code']) || $result['code'] != 0) {
-			$error_msg = $result['message'] ?? __('Unknown error', 'ponponpay-woocommerce');
+			$error_msg = $result['message'] ?? __('Unknown error', 'ponponpay-crypto-payment-gateway');
 			WC_Admin_Settings::add_error(
-				__('PonponPay plugin activation failed: ', 'ponponpay-woocommerce') . $error_msg
+				__('PonponPay plugin activation failed: ', 'ponponpay-crypto-payment-gateway') . $error_msg
 			);
 			return;
 		}
 
-		WC_Admin_Settings::add_message(__('PonponPay API Key verified successfully!', 'ponponpay-woocommerce'));
+		WC_Admin_Settings::add_message(__('PonponPay API Key verified successfully!', 'ponponpay-crypto-payment-gateway'));
 	}
 
 	/**
@@ -133,16 +133,16 @@ class PonponPay_Gateway extends WC_Payment_Gateway
 		$order = wc_get_order($order_id);
 
 		if (!$this->api) {
-			wc_add_notice(__('PonponPay is not properly configured. Please contact the store administrator.', 'ponponpay-woocommerce'), 'error');
+			wc_add_notice(__('PonponPay is not properly configured. Please contact the store administrator.', 'ponponpay-crypto-payment-gateway'), 'error');
 			return ['result' => 'failure'];
 		}
 
 		try {
 			// 更新订单状态为等待支付
-			$order->update_status('pending', __('Awaiting PonponPay crypto payment.', 'ponponpay-woocommerce'));
+			$order->update_status('pending', __('Awaiting PonponPay crypto payment.', 'ponponpay-crypto-payment-gateway'));
 
 			// 组合独立的收银台 URL
-			$checkout_url = home_url('/?ponponpay_checkout=WC_' . $order_id);
+			$checkout_url = ponponpay_build_checkout_url('WC_' . $order_id, $order->get_order_key());
 
 			// 日志记录
 			$this->log('Redirecting WC order to PonponPay checkout: WC_' . $order_id);
@@ -194,9 +194,9 @@ class PonponPay_Gateway extends WC_Payment_Gateway
 		$currency = $order->get_meta('_ponponpay_currency');
 
 		if ($trade_id) {
-			echo '<p><strong>' . esc_html__('PonponPay Trade ID:', 'ponponpay-woocommerce') . '</strong> ' . esc_html($trade_id) . '</p>';
-			echo '<p><strong>' . esc_html__('Network:', 'ponponpay-woocommerce') . '</strong> ' . esc_html($network) . '</p>';
-			echo '<p><strong>' . esc_html__('Currency:', 'ponponpay-woocommerce') . '</strong> ' . esc_html($currency) . '</p>';
+			echo '<p><strong>' . esc_html__('PonponPay Trade ID:', 'ponponpay-crypto-payment-gateway') . '</strong> ' . esc_html($trade_id) . '</p>';
+			echo '<p><strong>' . esc_html__('Network:', 'ponponpay-crypto-payment-gateway') . '</strong> ' . esc_html($network) . '</p>';
+			echo '<p><strong>' . esc_html__('Currency:', 'ponponpay-crypto-payment-gateway') . '</strong> ' . esc_html($currency) . '</p>';
 		}
 	}
 

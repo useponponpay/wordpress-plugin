@@ -36,14 +36,14 @@ class PonponPay_Shortcode
 			'amount' => '',
 			'fiat_currency' => 'USD',
 			'description' => '',
-			'button_text' => __('Pay with Crypto', 'ponponpay'),
+			'button_text' => __('Pay with Crypto', 'ponponpay-crypto-payment-gateway'),
 			'redirect_url' => '',
 		], $atts, 'ponponpay_button');
 
 		// 金额必填
 		if (empty($atts['amount']) || !is_numeric($atts['amount'])) {
 			if (current_user_can('manage_options')) {
-				return '<p style="color:red;">' . esc_html__('[PonponPay] Error: amount parameter is required.', 'ponponpay') . '</p>';
+				return '<p style="color:red;">' . esc_html__('[PonponPay] Error: amount parameter is required.', 'ponponpay-crypto-payment-gateway') . '</p>';
 			}
 			return '';
 		}
@@ -52,7 +52,7 @@ class PonponPay_Shortcode
 		$api_key = PonponPay_Settings::get_api_key();
 		if (empty($api_key)) {
 			if (current_user_can('manage_options')) {
-				return '<p style="color:red;">' . esc_html__('[PonponPay] Error: API Key not configured. Go to Settings → PonponPay.', 'ponponpay') . '</p>';
+				return '<p style="color:red;">' . esc_html__('[PonponPay] Error: API Key not configured. Go to Settings → PonponPay.', 'ponponpay-crypto-payment-gateway') . '</p>';
 			}
 			return '';
 		}
@@ -90,7 +90,7 @@ class PonponPay_Shortcode
 			<!-- 处理中 -->
 			<div class="ponponpay-step ponponpay-step-processing" style="display:none;">
 				<div class="ponponpay-loading">
-					<?php esc_html_e('Initializing payment...', 'ponponpay'); ?>
+					<?php esc_html_e('Initializing payment...', 'ponponpay-crypto-payment-gateway'); ?>
 				</div>
 			</div>
 

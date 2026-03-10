@@ -1,16 +1,16 @@
 <?php
 /**
  * Plugin Name: PonponPay - Crypto Payment Gateway
- * Plugin URI: https://ponponpay.com
+ * Plugin URI: https://ponponpay.com/docs
  * Description: Accept cryptocurrency payments (USDT, USDC, etc.) on any WordPress site via PonponPay. Use shortcodes to embed payment buttons, or integrate with WooCommerce.
  * Version: 1.0.0
  * Author: PonponPay Engineering Team
  * Author URI: https://ponponpay.com
  * License: GPL-2.0+
- * Text Domain: ponponpay
+ * Text Domain: ponponpay-crypto-payment-gateway
  * Domain Path: /languages
  * Requires at least: 5.0
- * Tested up to: 6.7
+ * Tested up to: 6.9
  * Requires PHP: 7.4
  */
 
@@ -39,9 +39,6 @@ if (!defined('PONPONPAY_API_URL')) {
  */
 function ponponpay_init()
 {
-	// 加载翻译
-	load_plugin_textdomain('ponponpay', false, dirname(plugin_basename(__FILE__)) . '/languages');
-
 	// 加载核心类（不依赖 WooCommerce）
 	require_once PONPONPAY_PLUGIN_DIR . 'includes/class-ponponpay-api.php';
 	require_once PONPONPAY_PLUGIN_DIR . 'includes/class-ponponpay-settings.php';
@@ -63,6 +60,34 @@ function ponponpay_init()
 add_action('plugins_loaded', 'ponponpay_init');
 
 /**
+ * 生成收银台访问令牌。
+ *
+ * @param string $order_id 订单号
+ * @param string $secret   附加密钥
+ * @return string
+ */
+function ponponpay_create_checkout_token($order_id, $secret = '')
+{
+	$payload = (string)$order_id . '|' . (string)$secret;
+	return hash_hmac('sha256', $payload, wp_salt('ponponpay_checkout'));
+}
+
+/**
+ * 构造收银台 URL。
+ *
+ * @param string $order_id 订单号
+ * @param string $secret   附加密钥
+ * @return string
+ */
+function ponponpay_build_checkout_url($order_id, $secret = '')
+{
+	return add_query_arg([
+		'ponponpay_checkout' => $order_id,
+		'ponponpay_token' => ponponpay_create_checkout_token($order_id, $secret),
+	], home_url('/'));
+}
+
+/**
  * 注册 WooCommerce 支付网关（仅在 WooCommerce 可用时）
  */
 function ponponpay_add_wc_gateway($gateways)
@@ -80,11 +105,64 @@ add_filter('woocommerce_payment_gateways', 'ponponpay_add_wc_gateway');
 function ponponpay_plugin_links($links)
 {
 	$settings_link = '<a href="' . admin_url('options-general.php?page=ponponpay') . '">' .
-		esc_html__('Settings', 'ponponpay') . '</a>';
+		esc_html__('Settings', 'ponponpay-crypto-payment-gateway') . '</a>';
 	array_unshift($links, $settings_link);
 	return $links;
 }
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'ponponpay_plugin_links');
+
+/**
+ * 检查文本中是否包含 PonponPay 短代码。
+ *
+ * @param string $content 文本内容
+ * @return bool
+ */
+function ponponpay_has_shortcode($content)
+{
+	return is_string($content) && has_shortcode($content, 'ponponpay_button');
+}
+
+/**
+ * 检查当前查询结果中是否包含 PonponPay 短代码。
+ *
+ * @return bool
+ */
+function ponponpay_current_query_has_shortcode()
+{
+	global $wp_query;
+
+	if (empty($wp_query) || empty($wp_query->posts) || !is_array($wp_query->posts)) {
+		return false;
+	}
+
+	foreach ($wp_query->posts as $ponponpay_post) {
+		if (!($ponponpay_post instanceof WP_Post)) {
+			continue;
+		}
+
+		if (ponponpay_has_shortcode($ponponpay_post->post_content) || ponponpay_has_shortcode($ponponpay_post->post_excerpt)) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
+ * 在摘要中执行 PonponPay 短代码。
+ *
+ * @param string $excerpt 摘要内容
+ * @return string
+ */
+function ponponpay_render_shortcode_in_excerpt($excerpt)
+{
+	if (!ponponpay_has_shortcode($excerpt)) {
+		return $excerpt;
+	}
+
+	return do_shortcode($excerpt);
+}
+add_filter('get_the_excerpt', 'ponponpay_render_shortcode_in_excerpt', 12);
 
 /**
  * 加载前端资源
@@ -95,7 +173,11 @@ function ponponpay_enqueue_scripts()
 	global $post;
 	$load = false;
 
-	if ($post && has_shortcode($post->post_content, 'ponponpay_button')) {
+	if ($post && (ponponpay_has_shortcode($post->post_content) || ponponpay_has_shortcode($post->post_excerpt))) {
+		$load = true;
+	}
+
+	if (!$load && ponponpay_current_query_has_shortcode()) {
 		$load = true;
 	}
 
@@ -120,6 +202,10 @@ function ponponpay_enqueue_scripts()
 		wp_localize_script('ponponpay-script', 'ponponpayAjax', [
 			'restUrl' => esc_url_raw(rest_url('ponponpay/v1/')),
 			'nonce' => wp_create_nonce('wp_rest'),
+			'i18n' => [
+				'failedInitPayment' => __('Failed to initialize payment', 'ponponpay-crypto-payment-gateway'),
+				'networkErrorTryAgain' => __('Network error. Please try again.', 'ponponpay-crypto-payment-gateway'),
+			],
 		]);
 	}
 }
@@ -176,6 +262,7 @@ add_action('before_woocommerce_init', function () {
  */
 add_filter('query_vars', function ($vars) {
 	$vars[] = 'ponponpay_checkout';
+	$vars[] = 'ponponpay_token';
 	return $vars;
 });
 

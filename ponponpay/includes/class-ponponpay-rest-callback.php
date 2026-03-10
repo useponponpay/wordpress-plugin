@@ -48,22 +48,38 @@ class PonponPay_REST_Callback
 		register_rest_route($namespace, '/init-payment', [
 			'methods' => 'POST',
 			'callback' => [$this, 'init_payment'],
-			'permission_callback' => '__return_true',
+			'permission_callback' => [$this, 'verify_frontend_request'],
 		]);
 
 		// 创建订单（前端收银台调用）
 		register_rest_route($namespace, '/create-order', [
 			'methods' => 'POST',
 			'callback' => [$this, 'create_order'],
-			'permission_callback' => '__return_true',
+			'permission_callback' => [$this, 'verify_frontend_request'],
 		]);
 
 		// 获取支付方式（前端短代码调用）
 		register_rest_route($namespace, '/methods', [
 			'methods' => 'GET',
 			'callback' => [$this, 'get_methods'],
-			'permission_callback' => '__return_true',
+			'permission_callback' => [$this, 'verify_frontend_request'],
 		]);
+	}
+
+	/**
+	 * 校验前端发起的 REST 请求。
+	 *
+	 * @param WP_REST_Request $request
+	 * @return true|WP_Error
+	 */
+	public function verify_frontend_request($request)
+	{
+		$nonce = $request->get_header('X-WP-Nonce');
+		if (empty($nonce) || !wp_verify_nonce($nonce, 'wp_rest')) {
+			return new WP_Error('ponponpay_forbidden', 'Invalid request nonce', ['status' => 403]);
+		}
+
+		return true;
 	}
 
 	/**
@@ -126,7 +142,7 @@ class PonponPay_REST_Callback
 			'redirect_url' => $redirect_url,
 		]);
 
-		$checkout_url = home_url('/?ponponpay_checkout=' . $mch_order_id);
+		$checkout_url = ponponpay_build_checkout_url($mch_order_id);
 
 		return new WP_REST_Response([
 			'success' => true,
@@ -151,8 +167,9 @@ class PonponPay_REST_Callback
 		$order_id = sanitize_text_field($request->get_param('order_id'));
 		$network = sanitize_text_field($request->get_param('network'));
 		$currency = sanitize_text_field($request->get_param('currency'));
+		$checkout_token = sanitize_text_field($request->get_param('token'));
 
-		if (empty($order_id) || empty($network) || empty($currency)) {
+		if (empty($order_id) || empty($network) || empty($currency) || empty($checkout_token)) {
 			return new WP_REST_Response(['success' => false, 'error' => 'Missing parameters'], 400);
 		}
 
@@ -171,12 +188,23 @@ class PonponPay_REST_Callback
 				if (!$wc_order) {
 					return new WP_REST_Response(['success' => false, 'error' => 'Order not found'], 404);
 				}
+
+				$expected_token = ponponpay_create_checkout_token($order_id, $wc_order->get_order_key());
+				if (!hash_equals($expected_token, $checkout_token)) {
+					return new WP_REST_Response(['success' => false, 'error' => 'Invalid checkout token'], 403);
+				}
+
 				$amount = $wc_order->get_total();
 				$redirect_url = $wc_order->get_checkout_order_received_url();
 			} else {
 				return new WP_REST_Response(['success' => false, 'error' => 'Order not found'], 404);
 			}
 		} else {
+			$expected_token = ponponpay_create_checkout_token($order_id);
+			if (!hash_equals($expected_token, $checkout_token)) {
+				return new WP_REST_Response(['success' => false, 'error' => 'Invalid checkout token'], 403);
+			}
+
 			$amount = $payment->amount;
 			$redirect_url = $payment->redirect_url;
 		}

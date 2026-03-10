@@ -1,0 +1,322 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-09 14:34+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. translators: %s: debug log file path
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:259
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:275
+#, php-format
+msgid "(Debug log: %s)"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:58
+msgid "API Configuration"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:68
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:82
+msgid "API Key"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:284
+msgid "API Key verified successfully!"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:32
+msgid ""
+"Accept cryptocurrency payments (USDT, USDC, etc.) via PonponPay. Supports "
+"Tron, Ethereum, BSC, Polygon, Solana networks."
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:142
+msgid "Awaiting PonponPay crypto payment."
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:113
+msgid "Basic Usage"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:172
+msgid "Button label"
+msgstr ""
+
+#. translators: %s: callback URL
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:97
+#, php-format
+msgid "Callback URL: %s"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/templates/payment-checkout.php:23
+msgid "Cancel and return"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:60
+msgid "Configure your PonponPay API credentials. Get your API Key from"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/templates/payment-checkout.php:22
+msgid "Confirm & Pay"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:40
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:71
+msgid "Crypto Payment (PonponPay)"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:199
+msgid "Currency:"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:135
+msgid "Default"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:138
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:75
+msgid "Description"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:64
+msgid "Enable PonponPay Crypto Payment"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:62
+msgid "Enable/Disable"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:92
+msgid "Enter your PonponPay API Key"
+msgstr ""
+
+#. translators: %s: PonponPay console URL
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:86
+#, php-format
+msgid "Enter your PonponPay API Key. Get it from %s."
+msgstr ""
+
+#: wordpress-plugin/ponponpay/templates/payment-checkout.php:29
+msgid "Failed to create order"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/ponponpay.php:124
+msgid "Failed to initialize payment"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:156
+msgid "Fiat currency code"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:118
+msgid "Full Parameters"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-shortcode.php:93
+msgid "Initializing payment..."
+msgstr ""
+
+#: wordpress-plugin/ponponpay/templates/payment-checkout.php:15
+msgid "Invalid request"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/templates/payment-checkout.php:21
+msgid "Loading methods..."
+msgstr ""
+
+#: wordpress-plugin/ponponpay/templates/payment-checkout.php:30
+msgid "Network error while creating order."
+msgstr ""
+
+#: wordpress-plugin/ponponpay/templates/payment-checkout.php:28
+msgid "Network error while loading methods."
+msgstr ""
+
+#: wordpress-plugin/ponponpay/ponponpay.php:125
+msgid "Network error. Please try again."
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:198
+msgid "Network:"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/templates/payment-checkout.php:26
+msgid "No payment methods available"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/templates/payment-checkout.php:27
+msgid "No payment methods available. Contact administrator."
+msgstr ""
+
+#: wordpress-plugin/ponponpay/templates/payment-checkout.php:61
+#, php-format
+msgid "Order #%s"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/templates/payment-checkout.php:16
+msgid "Order not found"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:129
+msgid "Parameter"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:123
+msgid "Parameters"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-shortcode.php:39
+#: wordpress-plugin/ponponpay/templates/payment-checkout.php:17
+msgid "Pay with Crypto"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:41
+msgid "Pay with USDT, USDC and other cryptocurrencies via PonponPay."
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:78
+msgid ""
+"Pay with USDT, USDC and other cryptocurrencies. Supports Tron, Ethereum, "
+"BSC, Polygon, Solana networks."
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:148
+msgid "Payment amount"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:164
+msgid "Payment description"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:77
+msgid "Payment method description displayed to customers at checkout."
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:70
+msgid "Payment method title displayed to customers at checkout."
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:272
+msgid "Plugin activation failed: "
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:39
+msgid "PonponPay"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:31
+msgid "PonponPay - Crypto Payment"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:122
+msgid "PonponPay API Key verified successfully!"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:256
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:109
+msgid "PonponPay API connection failed: "
+msgstr ""
+
+#: wordpress-plugin/ponponpay/templates/payment-checkout.php:18
+msgid "PonponPay Checkout"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:38
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:201
+msgid "PonponPay Settings"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:197
+msgid "PonponPay Trade ID:"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:136
+msgid ""
+"PonponPay is not properly configured. Please contact the store administrator."
+msgstr ""
+
+#. translators: 1: transaction ID, 2: currency, 3: network
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-callback.php:166
+#, php-format
+msgid ""
+"PonponPay payment completed. Transaction: %1$s, Currency: %2$s, Network: %3$s"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:117
+msgid "PonponPay plugin activation failed: "
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-callback.php:126
+msgid "PonponPay: Payment cancelled."
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-callback.php:121
+msgid "PonponPay: Payment expired."
+msgstr ""
+
+#: wordpress-plugin/ponponpay/templates/payment-checkout.php:24
+msgid "Processing..."
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:132
+msgid "Required"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/templates/payment-checkout.php:25
+msgid "Secured by"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/templates/payment-checkout.php:20
+msgid "Select Payment Method"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/templates/payment-checkout.php:19
+msgid "Selected"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/ponponpay.php:83
+msgid "Settings"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:77
+msgid "Shortcode Usage"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:68
+msgid "Title"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:180
+msgid "URL to redirect after payment"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-gateway.php:115
+msgid "Unknown error"
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-settings.php:208
+msgid ""
+"WooCommerce detected! PonponPay is available as a payment gateway in "
+"WooCommerce → Settings → Payments."
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-shortcode.php:55
+msgid "[PonponPay] Error: API Key not configured. Go to Settings → PonponPay."
+msgstr ""
+
+#: wordpress-plugin/ponponpay/includes/class-ponponpay-shortcode.php:46
+msgid "[PonponPay] Error: amount parameter is required."
+msgstr ""

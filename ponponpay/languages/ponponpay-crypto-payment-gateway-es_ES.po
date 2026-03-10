@@ -1,0 +1,219 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PonponPay - Crypto Payment Gateway 1.0.0\n"
+"POT-Creation-Date: 2026-03-09 14:28+0800\n"
+"PO-Revision-Date: 2026-03-09 14:28+0800\n"
+"Last-Translator: PonponPay <support@ponponpay.com>\n"
+"Language-Team: Spanish\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "(Debug log: %s)"
+msgstr "(Registro de depuración: %s)"
+
+msgid "API Configuration"
+msgstr "Configuración de API"
+
+msgid "API Key"
+msgstr "Clave API"
+
+msgid "API Key verified successfully!"
+msgstr "¡La clave API se verificó correctamente!"
+
+msgid "Accept cryptocurrency payments (USDT, USDC, etc.) via PonponPay. Supports Tron, Ethereum, BSC, Polygon, Solana networks."
+msgstr "Acepta pagos con criptomonedas (USDT, USDC, etc.) a través de PonponPay. Compatible con las redes Tron, Ethereum, BSC, Polygon y Solana."
+
+msgid "Awaiting PonponPay crypto payment."
+msgstr "Esperando el pago con criptomonedas de PonponPay."
+
+msgid "Basic Usage"
+msgstr "Uso básico"
+
+msgid "Button label"
+msgstr "Texto del botón"
+
+msgid "Callback URL: %s"
+msgstr "URL de callback: %s"
+
+msgid "Configure your PonponPay API credentials. Get your API Key from"
+msgstr "Configura aquí tus credenciales de API de PonponPay. Obtén tu clave API en"
+
+msgid "Crypto Payment (PonponPay)"
+msgstr "Pago con criptomonedas (PonponPay)"
+
+msgid "Currency:"
+msgstr "Moneda:"
+
+msgid "Default"
+msgstr "Predeterminado"
+
+msgid "Description"
+msgstr "Descripción"
+
+msgid "Enable PonponPay Crypto Payment"
+msgstr "Activar pago cripto de PonponPay"
+
+msgid "Enable/Disable"
+msgstr "Activar/Desactivar"
+
+msgid "Enter your PonponPay API Key"
+msgstr "Introduce tu clave API de PonponPay"
+
+msgid "Enter your PonponPay API Key. Get it from %s."
+msgstr "Introduce tu clave API de PonponPay. Consíguela en %s."
+
+msgid "Failed to initialize payment"
+msgstr "No se pudo inicializar el pago"
+
+msgid "Fiat currency code"
+msgstr "Código de moneda fiat"
+
+msgid "Full Parameters"
+msgstr "Parámetros completos"
+
+msgid "Initializing payment..."
+msgstr "Inicializando pago..."
+
+msgid "Network error. Please try again."
+msgstr "Error de red. Inténtalo de nuevo."
+
+msgid "Network:"
+msgstr "Red:"
+
+msgid "Parameter"
+msgstr "Parámetro"
+
+msgid "Parameters"
+msgstr "Parámetros"
+
+msgid "Pay with Crypto"
+msgstr "Pagar con criptomonedas"
+
+msgid "Pay with USDT, USDC and other cryptocurrencies via PonponPay."
+msgstr "Paga con USDT, USDC y otras criptomonedas a través de PonponPay."
+
+msgid "Pay with USDT, USDC and other cryptocurrencies. Supports Tron, Ethereum, BSC, Polygon, Solana networks."
+msgstr "Paga con USDT, USDC y otras criptomonedas. Compatible con las redes Tron, Ethereum, BSC, Polygon y Solana."
+
+msgid "Payment amount"
+msgstr "Importe del pago"
+
+msgid "Payment description"
+msgstr "Descripción del pago"
+
+msgid "Payment method description displayed to customers at checkout."
+msgstr "Descripción del método de pago que se muestra a los clientes en el checkout."
+
+msgid "Payment method title displayed to customers at checkout."
+msgstr "Título del método de pago que se muestra a los clientes en el checkout."
+
+msgid "Plugin activation failed: "
+msgstr "La activación del plugin falló: "
+
+msgid "PonponPay"
+msgstr "PonponPay"
+
+msgid "PonponPay - Crypto Payment"
+msgstr "PonponPay - Pago con criptomonedas"
+
+msgid "PonponPay API Key verified successfully!"
+msgstr "¡La clave API de PonponPay se verificó correctamente!"
+
+msgid "PonponPay API connection failed: "
+msgstr "La conexión con la API de PonponPay falló: "
+
+msgid "PonponPay Settings"
+msgstr "Ajustes de PonponPay"
+
+msgid "PonponPay Trade ID:"
+msgstr "ID de transacción de PonponPay:"
+
+msgid "PonponPay is not properly configured. Please contact the store administrator."
+msgstr "PonponPay no está configurado correctamente. Ponte en contacto con el administrador de la tienda."
+
+msgid "PonponPay payment completed. Transaction: %1$s, Currency: %2$s, Network: %3$s"
+msgstr "Pago de PonponPay completado. Transacción: %1$s, moneda: %2$s, red: %3$s"
+
+msgid "PonponPay plugin activation failed: "
+msgstr "La activación del plugin PonponPay falló: "
+
+msgid "PonponPay: Payment cancelled."
+msgstr "PonponPay: pago cancelado."
+
+msgid "PonponPay: Payment expired."
+msgstr "PonponPay: pago caducado."
+
+msgid "Required"
+msgstr "Obligatorio"
+
+msgid "Settings"
+msgstr "Ajustes"
+
+msgid "Shortcode Usage"
+msgstr "Uso del shortcode"
+
+msgid "Title"
+msgstr "Título"
+
+msgid "URL to redirect after payment"
+msgstr "URL de redirección después del pago"
+
+msgid "Unknown error"
+msgstr "Error desconocido"
+
+msgid "WooCommerce detected! PonponPay is available as a payment gateway in WooCommerce → Settings → Payments."
+msgstr "¡WooCommerce detectado! PonponPay está disponible como pasarela de pago en WooCommerce → Settings → Payments."
+
+msgid "[PonponPay] Error: API Key not configured. Go to Settings → PonponPay."
+msgstr "[PonponPay] Error: la clave API no está configurada. Ve a Settings → PonponPay."
+
+msgid "[PonponPay] Error: amount parameter is required."
+msgstr "[PonponPay] Error: el parámetro amount es obligatorio."
+
+msgid "Invalid request"
+msgstr "Solicitud inválida"
+
+msgid "Order not found"
+msgstr "Pedido no encontrado"
+
+msgid "PonponPay Checkout"
+msgstr "Pago de PonponPay"
+
+msgid "Selected"
+msgstr "Seleccionado"
+
+msgid "Select Payment Method"
+msgstr "Seleccionar método de pago"
+
+msgid "Loading methods..."
+msgstr "Cargando métodos de pago..."
+
+msgid "Confirm & Pay"
+msgstr "Confirmar y pagar"
+
+msgid "Cancel and return"
+msgstr "Cancelar y volver"
+
+msgid "Processing..."
+msgstr "Procesando..."
+
+msgid "Secured by"
+msgstr "Protegido por"
+
+msgid "No payment methods available"
+msgstr "No hay métodos de pago disponibles"
+
+msgid "No payment methods available. Contact administrator."
+msgstr "No hay métodos de pago disponibles. Contacte al administrador."
+
+msgid "Network error while loading methods."
+msgstr "Error de red al cargar los métodos de pago."
+
+msgid "Failed to create order"
+msgstr "No se pudo crear el pedido"
+
+msgid "Network error while creating order."
+msgstr "Error de red al crear el pedido."

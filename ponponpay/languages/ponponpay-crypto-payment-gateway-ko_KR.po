@@ -1,0 +1,219 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PonponPay - Crypto Payment Gateway 1.0.0\n"
+"POT-Creation-Date: 2026-03-09 14:28+0800\n"
+"PO-Revision-Date: 2026-03-09 14:28+0800\n"
+"Last-Translator: PonponPay <support@ponponpay.com>\n"
+"Language-Team: Korean\n"
+"Language: ko_KR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "(Debug log: %s)"
+msgstr "(디버그 로그: %s)"
+
+msgid "API Configuration"
+msgstr "API 구성"
+
+msgid "API Key"
+msgstr "API Key"
+
+msgid "API Key verified successfully!"
+msgstr "API Key 확인이 완료되었습니다."
+
+msgid "Accept cryptocurrency payments (USDT, USDC, etc.) via PonponPay. Supports Tron, Ethereum, BSC, Polygon, Solana networks."
+msgstr "PonponPay를 통해 암호화폐 결제(USDT, USDC 등)를 받을 수 있습니다. Tron, Ethereum, BSC, Polygon, Solana 네트워크를 지원합니다."
+
+msgid "Awaiting PonponPay crypto payment."
+msgstr "PonponPay 암호화폐 결제를 기다리는 중입니다."
+
+msgid "Basic Usage"
+msgstr "기본 사용법"
+
+msgid "Button label"
+msgstr "버튼 라벨"
+
+msgid "Callback URL: %s"
+msgstr "콜백 URL: %s"
+
+msgid "Configure your PonponPay API credentials. Get your API Key from"
+msgstr "PonponPay API 자격 증명을 설정하세요. API Key 발급 위치:"
+
+msgid "Crypto Payment (PonponPay)"
+msgstr "암호화폐 결제 (PonponPay)"
+
+msgid "Currency:"
+msgstr "통화:"
+
+msgid "Default"
+msgstr "기본값"
+
+msgid "Description"
+msgstr "설명"
+
+msgid "Enable PonponPay Crypto Payment"
+msgstr "PonponPay 암호화폐 결제 활성화"
+
+msgid "Enable/Disable"
+msgstr "활성화/비활성화"
+
+msgid "Enter your PonponPay API Key"
+msgstr "PonponPay API Key를 입력하세요"
+
+msgid "Enter your PonponPay API Key. Get it from %s."
+msgstr "PonponPay API Key를 입력하세요. %s에서 발급받을 수 있습니다."
+
+msgid "Failed to initialize payment"
+msgstr "결제 초기화에 실패했습니다"
+
+msgid "Fiat currency code"
+msgstr "법정화폐 코드"
+
+msgid "Full Parameters"
+msgstr "전체 파라미터"
+
+msgid "Initializing payment..."
+msgstr "결제를 초기화하는 중..."
+
+msgid "Network error. Please try again."
+msgstr "네트워크 오류가 발생했습니다. 다시 시도해 주세요."
+
+msgid "Network:"
+msgstr "네트워크:"
+
+msgid "Parameter"
+msgstr "파라미터"
+
+msgid "Parameters"
+msgstr "파라미터"
+
+msgid "Pay with Crypto"
+msgstr "암호화폐로 결제"
+
+msgid "Pay with USDT, USDC and other cryptocurrencies via PonponPay."
+msgstr "PonponPay를 통해 USDT, USDC 및 기타 암호화폐로 결제하세요."
+
+msgid "Pay with USDT, USDC and other cryptocurrencies. Supports Tron, Ethereum, BSC, Polygon, Solana networks."
+msgstr "USDT, USDC 및 기타 암호화폐로 결제할 수 있습니다. Tron, Ethereum, BSC, Polygon, Solana 네트워크를 지원합니다."
+
+msgid "Payment amount"
+msgstr "결제 금액"
+
+msgid "Payment description"
+msgstr "결제 설명"
+
+msgid "Payment method description displayed to customers at checkout."
+msgstr "체크아웃 시 고객에게 표시되는 결제 방법 설명입니다."
+
+msgid "Payment method title displayed to customers at checkout."
+msgstr "체크아웃 시 고객에게 표시되는 결제 방법 제목입니다."
+
+msgid "Plugin activation failed: "
+msgstr "플러그인 활성화 실패: "
+
+msgid "PonponPay"
+msgstr "PonponPay"
+
+msgid "PonponPay - Crypto Payment"
+msgstr "PonponPay - 암호화폐 결제"
+
+msgid "PonponPay API Key verified successfully!"
+msgstr "PonponPay API Key 확인이 완료되었습니다."
+
+msgid "PonponPay API connection failed: "
+msgstr "PonponPay API 연결 실패: "
+
+msgid "PonponPay Settings"
+msgstr "PonponPay 설정"
+
+msgid "PonponPay Trade ID:"
+msgstr "PonponPay 거래 ID:"
+
+msgid "PonponPay is not properly configured. Please contact the store administrator."
+msgstr "PonponPay가 올바르게 설정되지 않았습니다. 상점 관리자에게 문의하세요."
+
+msgid "PonponPay payment completed. Transaction: %1$s, Currency: %2$s, Network: %3$s"
+msgstr "PonponPay 결제가 완료되었습니다. 거래: %1$s, 통화: %2$s, 네트워크: %3$s"
+
+msgid "PonponPay plugin activation failed: "
+msgstr "PonponPay 플러그인 활성화 실패: "
+
+msgid "PonponPay: Payment cancelled."
+msgstr "PonponPay: 결제가 취소되었습니다."
+
+msgid "PonponPay: Payment expired."
+msgstr "PonponPay: 결제가 만료되었습니다."
+
+msgid "Required"
+msgstr "필수"
+
+msgid "Settings"
+msgstr "설정"
+
+msgid "Shortcode Usage"
+msgstr "쇼트코드 사용법"
+
+msgid "Title"
+msgstr "제목"
+
+msgid "URL to redirect after payment"
+msgstr "결제 후 리디렉션 URL"
+
+msgid "Unknown error"
+msgstr "알 수 없는 오류"
+
+msgid "WooCommerce detected! PonponPay is available as a payment gateway in WooCommerce → Settings → Payments."
+msgstr "WooCommerce가 감지되었습니다. PonponPay는 WooCommerce → Settings → Payments에서 결제 게이트웨이로 사용할 수 있습니다."
+
+msgid "[PonponPay] Error: API Key not configured. Go to Settings → PonponPay."
+msgstr "[PonponPay] 오류: API Key가 설정되지 않았습니다. Settings → PonponPay로 이동하세요."
+
+msgid "[PonponPay] Error: amount parameter is required."
+msgstr "[PonponPay] 오류: amount 파라미터는 필수입니다."
+
+msgid "Invalid request"
+msgstr "잘못된 요청입니다"
+
+msgid "Order not found"
+msgstr "주문을 찾을 수 없습니다"
+
+msgid "PonponPay Checkout"
+msgstr "PonponPay 결제"
+
+msgid "Selected"
+msgstr "선택됨"
+
+msgid "Select Payment Method"
+msgstr "결제 수단 선택"
+
+msgid "Loading methods..."
+msgstr "결제 수단 불러오는 중..."
+
+msgid "Confirm & Pay"
+msgstr "확인 후 결제"
+
+msgid "Cancel and return"
+msgstr "취소하고 돌아가기"
+
+msgid "Processing..."
+msgstr "처리 중..."
+
+msgid "Secured by"
+msgstr "보안 제공"
+
+msgid "No payment methods available"
+msgstr "사용 가능한 결제 수단이 없습니다"
+
+msgid "No payment methods available. Contact administrator."
+msgstr "사용 가능한 결제 수단이 없습니다. 관리자에게 문의하세요."
+
+msgid "Network error while loading methods."
+msgstr "결제 수단을 불러오는 중 네트워크 오류가 발생했습니다."
+
+msgid "Failed to create order"
+msgstr "주문 생성에 실패했습니다"
+
+msgid "Network error while creating order."
+msgstr "주문 생성 중 네트워크 오류가 발생했습니다."

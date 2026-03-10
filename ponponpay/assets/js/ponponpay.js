@@ -40,13 +40,15 @@
 					} else {
 						$widget.find('.ponponpay-step-processing').hide();
 						$widget.find('.ponponpay-step-button').show();
-						$widget.find('.ponponpay-error').text(res.error || 'Failed to initialize payment').show();
+						$widget.find('.ponponpay-error').text(
+							res.error || ponponpayAjax.i18n.failedInitPayment
+						).show();
 					}
 				},
 				error: function () {
 					$widget.find('.ponponpay-step-processing').hide();
 					$widget.find('.ponponpay-step-button').show();
-					$widget.find('.ponponpay-error').text('Network error. Please try again.').show();
+					$widget.find('.ponponpay-error').text(ponponpayAjax.i18n.networkErrorTryAgain).show();
 				}
 			});
 		});

@@ -1,0 +1,219 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PonponPay - Crypto Payment Gateway 1.0.0\n"
+"POT-Creation-Date: 2026-03-09 14:28+0800\n"
+"PO-Revision-Date: 2026-03-09 14:28+0800\n"
+"Last-Translator: PonponPay <support@ponponpay.com>\n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+
+msgid "(Debug log: %s)"
+msgstr "(سجل التصحيح: %s)"
+
+msgid "API Configuration"
+msgstr "إعدادات API"
+
+msgid "API Key"
+msgstr "مفتاح API"
+
+msgid "API Key verified successfully!"
+msgstr "تم التحقق من مفتاح API بنجاح!"
+
+msgid "Accept cryptocurrency payments (USDT, USDC, etc.) via PonponPay. Supports Tron, Ethereum, BSC, Polygon, Solana networks."
+msgstr "اقبل مدفوعات العملات الرقمية (USDT وUSDC وغيرها) عبر PonponPay. يدعم شبكات Tron وEthereum وBSC وPolygon وSolana."
+
+msgid "Awaiting PonponPay crypto payment."
+msgstr "بانتظار دفعة PonponPay بالعملات الرقمية."
+
+msgid "Basic Usage"
+msgstr "الاستخدام الأساسي"
+
+msgid "Button label"
+msgstr "نص الزر"
+
+msgid "Callback URL: %s"
+msgstr "رابط الاستدعاء: %s"
+
+msgid "Configure your PonponPay API credentials. Get your API Key from"
+msgstr "قم بإعداد بيانات اعتماد API الخاصة بـ PonponPay هنا. احصل على مفتاح API من"
+
+msgid "Crypto Payment (PonponPay)"
+msgstr "الدفع بالعملات الرقمية (PonponPay)"
+
+msgid "Currency:"
+msgstr "العملة:"
+
+msgid "Default"
+msgstr "الافتراضي"
+
+msgid "Description"
+msgstr "الوصف"
+
+msgid "Enable PonponPay Crypto Payment"
+msgstr "تفعيل الدفع الرقمي عبر PonponPay"
+
+msgid "Enable/Disable"
+msgstr "تفعيل/تعطيل"
+
+msgid "Enter your PonponPay API Key"
+msgstr "أدخل مفتاح API الخاص بـ PonponPay"
+
+msgid "Enter your PonponPay API Key. Get it from %s."
+msgstr "أدخل مفتاح API الخاص بـ PonponPay. يمكنك الحصول عليه من %s."
+
+msgid "Failed to initialize payment"
+msgstr "فشل تهيئة الدفع"
+
+msgid "Fiat currency code"
+msgstr "رمز العملة الورقية"
+
+msgid "Full Parameters"
+msgstr "جميع المعاملات"
+
+msgid "Initializing payment..."
+msgstr "جارٍ تهيئة الدفع..."
+
+msgid "Network error. Please try again."
+msgstr "خطأ في الشبكة. يرجى المحاولة مرة أخرى."
+
+msgid "Network:"
+msgstr "الشبكة:"
+
+msgid "Parameter"
+msgstr "المعامل"
+
+msgid "Parameters"
+msgstr "المعاملات"
+
+msgid "Pay with Crypto"
+msgstr "الدفع بالعملات الرقمية"
+
+msgid "Pay with USDT, USDC and other cryptocurrencies via PonponPay."
+msgstr "ادفع باستخدام USDT وUSDC وغيرها من العملات الرقمية عبر PonponPay."
+
+msgid "Pay with USDT, USDC and other cryptocurrencies. Supports Tron, Ethereum, BSC, Polygon, Solana networks."
+msgstr "ادفع باستخدام USDT وUSDC وغيرها من العملات الرقمية. يدعم شبكات Tron وEthereum وBSC وPolygon وSolana."
+
+msgid "Payment amount"
+msgstr "مبلغ الدفع"
+
+msgid "Payment description"
+msgstr "وصف الدفع"
+
+msgid "Payment method description displayed to customers at checkout."
+msgstr "وصف طريقة الدفع الظاهر للعملاء عند إتمام الشراء."
+
+msgid "Payment method title displayed to customers at checkout."
+msgstr "عنوان طريقة الدفع الظاهر للعملاء عند إتمام الشراء."
+
+msgid "Plugin activation failed: "
+msgstr "فشل تفعيل الإضافة: "
+
+msgid "PonponPay"
+msgstr "PonponPay"
+
+msgid "PonponPay - Crypto Payment"
+msgstr "PonponPay - الدفع بالعملات الرقمية"
+
+msgid "PonponPay API Key verified successfully!"
+msgstr "تم التحقق من مفتاح API الخاص بـ PonponPay بنجاح!"
+
+msgid "PonponPay API connection failed: "
+msgstr "فشل الاتصال بواجهة PonponPay API: "
+
+msgid "PonponPay Settings"
+msgstr "إعدادات PonponPay"
+
+msgid "PonponPay Trade ID:"
+msgstr "معرّف معاملة PonponPay:"
+
+msgid "PonponPay is not properly configured. Please contact the store administrator."
+msgstr "لم يتم إعداد PonponPay بشكل صحيح. يرجى التواصل مع مدير المتجر."
+
+msgid "PonponPay payment completed. Transaction: %1$s, Currency: %2$s, Network: %3$s"
+msgstr "اكتمل دفع PonponPay. المعاملة: %1$s، العملة: %2$s، الشبكة: %3$s"
+
+msgid "PonponPay plugin activation failed: "
+msgstr "فشل تفعيل إضافة PonponPay: "
+
+msgid "PonponPay: Payment cancelled."
+msgstr "PonponPay: تم إلغاء الدفع."
+
+msgid "PonponPay: Payment expired."
+msgstr "PonponPay: انتهت صلاحية الدفع."
+
+msgid "Required"
+msgstr "مطلوب"
+
+msgid "Settings"
+msgstr "الإعدادات"
+
+msgid "Shortcode Usage"
+msgstr "استخدام الشورت كود"
+
+msgid "Title"
+msgstr "العنوان"
+
+msgid "URL to redirect after payment"
+msgstr "رابط إعادة التوجيه بعد الدفع"
+
+msgid "Unknown error"
+msgstr "خطأ غير معروف"
+
+msgid "WooCommerce detected! PonponPay is available as a payment gateway in WooCommerce → Settings → Payments."
+msgstr "تم اكتشاف WooCommerce! أصبح PonponPay متاحًا كبوابة دفع في WooCommerce → Settings → Payments."
+
+msgid "[PonponPay] Error: API Key not configured. Go to Settings → PonponPay."
+msgstr "[PonponPay] خطأ: لم يتم إعداد مفتاح API. انتقل إلى Settings → PonponPay."
+
+msgid "[PonponPay] Error: amount parameter is required."
+msgstr "[PonponPay] خطأ: المعامل amount مطلوب."
+
+msgid "Invalid request"
+msgstr "طلب غير صالح"
+
+msgid "Order not found"
+msgstr "الطلب غير موجود"
+
+msgid "PonponPay Checkout"
+msgstr "الدفع عبر PonponPay"
+
+msgid "Selected"
+msgstr "المحدد"
+
+msgid "Select Payment Method"
+msgstr "اختر طريقة الدفع"
+
+msgid "Loading methods..."
+msgstr "جارٍ تحميل طرق الدفع..."
+
+msgid "Confirm & Pay"
+msgstr "تأكيد الدفع"
+
+msgid "Cancel and return"
+msgstr "إلغاء والعودة"
+
+msgid "Processing..."
+msgstr "جارٍ المعالجة..."
+
+msgid "Secured by"
+msgstr "مؤمّن بواسطة"
+
+msgid "No payment methods available"
+msgstr "لا توجد طرق دفع متاحة"
+
+msgid "No payment methods available. Contact administrator."
+msgstr "لا توجد طرق دفع متاحة. يرجى التواصل مع المسؤول."
+
+msgid "Network error while loading methods."
+msgstr "خطأ في الشبكة أثناء تحميل طرق الدفع."
+
+msgid "Failed to create order"
+msgstr "فشل إنشاء الطلب"
+
+msgid "Network error while creating order."
+msgstr "خطأ في الشبكة أثناء إنشاء الطلب."

@@ -1,0 +1,219 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PonponPay - Crypto Payment Gateway 1.0.0\n"
+"POT-Creation-Date: 2026-03-09 14:28+0800\n"
+"PO-Revision-Date: 2026-03-09 14:28+0800\n"
+"Last-Translator: PonponPay <support@ponponpay.com>\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "(Debug log: %s)"
+msgstr "（デバッグログ: %s）"
+
+msgid "API Configuration"
+msgstr "API 設定"
+
+msgid "API Key"
+msgstr "API Key"
+
+msgid "API Key verified successfully!"
+msgstr "API Key の検証に成功しました。"
+
+msgid "Accept cryptocurrency payments (USDT, USDC, etc.) via PonponPay. Supports Tron, Ethereum, BSC, Polygon, Solana networks."
+msgstr "PonponPay 経由で暗号資産決済（USDT、USDC など）を受け付けます。Tron、Ethereum、BSC、Polygon、Solana に対応しています。"
+
+msgid "Awaiting PonponPay crypto payment."
+msgstr "PonponPay の暗号資産決済を待機中です。"
+
+msgid "Basic Usage"
+msgstr "基本的な使い方"
+
+msgid "Button label"
+msgstr "ボタンラベル"
+
+msgid "Callback URL: %s"
+msgstr "コールバック URL: %s"
+
+msgid "Configure your PonponPay API credentials. Get your API Key from"
+msgstr "PonponPay API 認証情報を設定します。API Key の取得先:"
+
+msgid "Crypto Payment (PonponPay)"
+msgstr "暗号資産決済（PonponPay）"
+
+msgid "Currency:"
+msgstr "通貨:"
+
+msgid "Default"
+msgstr "デフォルト"
+
+msgid "Description"
+msgstr "説明"
+
+msgid "Enable PonponPay Crypto Payment"
+msgstr "PonponPay 暗号資産決済を有効化"
+
+msgid "Enable/Disable"
+msgstr "有効化/無効化"
+
+msgid "Enter your PonponPay API Key"
+msgstr "PonponPay API Key を入力してください"
+
+msgid "Enter your PonponPay API Key. Get it from %s."
+msgstr "PonponPay API Key を入力してください。%s から取得できます。"
+
+msgid "Failed to initialize payment"
+msgstr "決済の初期化に失敗しました"
+
+msgid "Fiat currency code"
+msgstr "法定通貨コード"
+
+msgid "Full Parameters"
+msgstr "全パラメータ"
+
+msgid "Initializing payment..."
+msgstr "決済を初期化しています..."
+
+msgid "Network error. Please try again."
+msgstr "ネットワークエラーが発生しました。もう一度お試しください。"
+
+msgid "Network:"
+msgstr "ネットワーク:"
+
+msgid "Parameter"
+msgstr "パラメータ"
+
+msgid "Parameters"
+msgstr "パラメータ一覧"
+
+msgid "Pay with Crypto"
+msgstr "暗号資産で支払う"
+
+msgid "Pay with USDT, USDC and other cryptocurrencies via PonponPay."
+msgstr "PonponPay 経由で USDT、USDC などの暗号資産で支払います。"
+
+msgid "Pay with USDT, USDC and other cryptocurrencies. Supports Tron, Ethereum, BSC, Polygon, Solana networks."
+msgstr "USDT、USDC などの暗号資産で支払えます。Tron、Ethereum、BSC、Polygon、Solana に対応しています。"
+
+msgid "Payment amount"
+msgstr "決済金額"
+
+msgid "Payment description"
+msgstr "決済説明"
+
+msgid "Payment method description displayed to customers at checkout."
+msgstr "チェックアウト時に顧客へ表示される決済方法の説明です。"
+
+msgid "Payment method title displayed to customers at checkout."
+msgstr "チェックアウト時に顧客へ表示される決済方法のタイトルです。"
+
+msgid "Plugin activation failed: "
+msgstr "プラグインの有効化に失敗しました: "
+
+msgid "PonponPay"
+msgstr "PonponPay"
+
+msgid "PonponPay - Crypto Payment"
+msgstr "PonponPay - 暗号資産決済"
+
+msgid "PonponPay API Key verified successfully!"
+msgstr "PonponPay API Key の検証に成功しました。"
+
+msgid "PonponPay API connection failed: "
+msgstr "PonponPay API への接続に失敗しました: "
+
+msgid "PonponPay Settings"
+msgstr "PonponPay 設定"
+
+msgid "PonponPay Trade ID:"
+msgstr "PonponPay 取引 ID:"
+
+msgid "PonponPay is not properly configured. Please contact the store administrator."
+msgstr "PonponPay が正しく設定されていません。ストア管理者にお問い合わせください。"
+
+msgid "PonponPay payment completed. Transaction: %1$s, Currency: %2$s, Network: %3$s"
+msgstr "PonponPay の支払いが完了しました。取引: %1$s、通貨: %2$s、ネットワーク: %3$s"
+
+msgid "PonponPay plugin activation failed: "
+msgstr "PonponPay プラグインの有効化に失敗しました: "
+
+msgid "PonponPay: Payment cancelled."
+msgstr "PonponPay: 支払いはキャンセルされました。"
+
+msgid "PonponPay: Payment expired."
+msgstr "PonponPay: 支払い期限が切れました。"
+
+msgid "Required"
+msgstr "必須"
+
+msgid "Settings"
+msgstr "設定"
+
+msgid "Shortcode Usage"
+msgstr "ショートコードの使い方"
+
+msgid "Title"
+msgstr "タイトル"
+
+msgid "URL to redirect after payment"
+msgstr "決済後のリダイレクト URL"
+
+msgid "Unknown error"
+msgstr "不明なエラー"
+
+msgid "WooCommerce detected! PonponPay is available as a payment gateway in WooCommerce → Settings → Payments."
+msgstr "WooCommerce を検出しました。PonponPay は WooCommerce → Settings → Payments の決済ゲートウェイとして利用できます。"
+
+msgid "[PonponPay] Error: API Key not configured. Go to Settings → PonponPay."
+msgstr "[PonponPay] エラー: API Key が設定されていません。Settings → PonponPay に移動してください。"
+
+msgid "[PonponPay] Error: amount parameter is required."
+msgstr "[PonponPay] エラー: amount パラメータは必須です。"
+
+msgid "Invalid request"
+msgstr "無効なリクエストです"
+
+msgid "Order not found"
+msgstr "注文が見つかりません"
+
+msgid "PonponPay Checkout"
+msgstr "PonponPay チェックアウト"
+
+msgid "Selected"
+msgstr "選択済み"
+
+msgid "Select Payment Method"
+msgstr "支払い方法を選択"
+
+msgid "Loading methods..."
+msgstr "支払い方法を読み込み中..."
+
+msgid "Confirm & Pay"
+msgstr "確認して支払う"
+
+msgid "Cancel and return"
+msgstr "キャンセルして戻る"
+
+msgid "Processing..."
+msgstr "処理中..."
+
+msgid "Secured by"
+msgstr "提供"
+
+msgid "No payment methods available"
+msgstr "利用可能な支払い方法がありません"
+
+msgid "No payment methods available. Contact administrator."
+msgstr "利用可能な支払い方法がありません。管理者に連絡してください。"
+
+msgid "Network error while loading methods."
+msgstr "支払い方法の読み込み中にネットワークエラーが発生しました。"
+
+msgid "Failed to create order"
+msgstr "注文の作成に失敗しました"
+
+msgid "Network error while creating order."
+msgstr "注文作成中にネットワークエラーが発生しました。"

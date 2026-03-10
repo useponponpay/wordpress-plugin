@@ -43,7 +43,7 @@ class PonponPay_Callback
 			$data = json_decode($input, true);
 
 			if (!$data) {
-				$data = $_POST;
+				$data = map_deep(wp_unslash($_POST), 'sanitize_text_field');
 			}
 
 			// 验证必要字段
@@ -64,16 +64,16 @@ class PonponPay_Callback
 			$expected_api_key = $gateway->get_option('api_key');
 			$auth_result = $this->validate_signature_headers(
 				$expected_api_key,
-				$_SERVER['HTTP_X_KEY_PREFIX'] ?? '',
-				$_SERVER['HTTP_X_TIMESTAMP'] ?? '',
-				$_SERVER['HTTP_X_NONCE'] ?? '',
-				$_SERVER['HTTP_X_SIGNATURE'] ?? '',
+				isset($_SERVER['HTTP_X_KEY_PREFIX']) ? sanitize_text_field(wp_unslash($_SERVER['HTTP_X_KEY_PREFIX'])) : '',
+				isset($_SERVER['HTTP_X_TIMESTAMP']) ? sanitize_text_field(wp_unslash($_SERVER['HTTP_X_TIMESTAMP'])) : '',
+				isset($_SERVER['HTTP_X_NONCE']) ? sanitize_text_field(wp_unslash($_SERVER['HTTP_X_NONCE'])) : '',
+				isset($_SERVER['HTTP_X_SIGNATURE']) ? sanitize_text_field(wp_unslash($_SERVER['HTTP_X_SIGNATURE'])) : '',
 				$input
 			);
 			if (is_wp_error($auth_result)) {
 				$logger->error('Signature validation failed: ' . $auth_result->get_error_message(), ['source' => 'ponponpay']);
 				status_header((int)($auth_result->get_error_data('status') ?: 401));
-				echo $auth_result->get_error_message();
+				echo esc_html($auth_result->get_error_message());
 				exit;
 			}
 
@@ -118,12 +118,12 @@ class PonponPay_Callback
 					break;
 
 				case 3:  // 已过期
-					$order->update_status('cancelled', __('PonponPay: Payment expired.', 'ponponpay-woocommerce'));
+					$order->update_status('cancelled', __('PonponPay: Payment expired.', 'ponponpay-crypto-payment-gateway'));
 					$logger->info('Payment expired for order: ' . $order_id, ['source' => 'ponponpay']);
 					break;
 
 				case 4:  // 取消支付
-					$order->update_status('cancelled', __('PonponPay: Payment cancelled.', 'ponponpay-woocommerce'));
+					$order->update_status('cancelled', __('PonponPay: Payment cancelled.', 'ponponpay-crypto-payment-gateway'));
 					$logger->info('Payment cancelled for order: ' . $order_id, ['source' => 'ponponpay']);
 					break;
 
@@ -163,7 +163,7 @@ class PonponPay_Callback
 		// 添加订单备注
 		$note = sprintf(
 			/* translators: 1: transaction ID, 2: currency, 3: network */
-			__('PonponPay payment completed. Transaction: %1$s, Currency: %2$s, Network: %3$s', 'ponponpay-woocommerce'),
+			__('PonponPay payment completed. Transaction: %1$s, Currency: %2$s, Network: %3$s', 'ponponpay-crypto-payment-gateway'),
 			$transaction_id,
 			$data['currency'] ?? 'N/A',
 			$data['network'] ?? 'N/A'
