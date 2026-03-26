@@ -46,6 +46,13 @@ class PonponPay_Callback
 				$data = map_deep(wp_unslash($_POST), 'sanitize_text_field');
 			}
 
+			// 对 json_decode 后的数据进行字段级消毒
+			if (is_array($data)) {
+				$data = array_map(function ($value) {
+					return is_string($value) ? sanitize_text_field($value) : $value;
+				}, $data);
+			}
+
 			// 验证必要字段
 			if (empty($data['order_no']) || empty($data['status'])) {
 				$logger->error('Callback missing required fields: order_no or status', ['source' => 'ponponpay']);

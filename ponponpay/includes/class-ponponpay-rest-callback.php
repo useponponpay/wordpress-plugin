@@ -270,6 +270,13 @@ class PonponPay_REST_Callback
 			$data = $request->get_body_params();
 		}
 
+		// 对 JSON 解码后的数据进行字段级消毒
+		if (is_array($data)) {
+			$data = array_map(function ($value) {
+				return is_string($value) ? sanitize_text_field($value) : $value;
+			}, $data);
+		}
+
 		// 验证必要字段
 		if (empty($data['order_no']) || empty($data['status'])) {
 			$this->log('Callback missing required fields');
