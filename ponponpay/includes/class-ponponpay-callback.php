@@ -43,6 +43,7 @@ class PonponPay_Callback
 			$data = json_decode($input, true);
 
 			if (!$data) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- PonponPay 服务端回调无法携带 WordPress nonce，下面会用签名头校验请求来源。
 				$data = map_deep(wp_unslash($_POST), 'sanitize_text_field');
 			}
 

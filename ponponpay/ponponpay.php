@@ -88,6 +88,122 @@ function ponponpay_build_checkout_url($order_id, $secret = '')
 }
 
 /**
+ * 获取 PonponPay 支付记录表名。
+ *
+ * @return string
+ */
+function ponponpay_payments_table()
+{
+	global $wpdb;
+
+	return $wpdb->prefix . 'ponponpay_payments';
+}
+
+/**
+ * 获取支付记录缓存键。
+ *
+ * @param string $order_id 订单号
+ * @return string
+ */
+function ponponpay_payment_cache_key($order_id)
+{
+	return 'ponponpay_payment_' . md5((string)$order_id);
+}
+
+/**
+ * 查询 PonponPay 支付记录。
+ *
+ * @param string $order_id 订单号
+ * @return object|null
+ */
+function ponponpay_get_payment($order_id)
+{
+	global $wpdb;
+
+	$order_id = sanitize_text_field((string)$order_id);
+	if ($order_id === '') {
+		return null;
+	}
+
+	$cache_key = ponponpay_payment_cache_key($order_id);
+	$payment = wp_cache_get($cache_key, 'ponponpay_payments');
+	if (false !== $payment) {
+		return $payment;
+	}
+
+	$table = esc_sql(ponponpay_payments_table());
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,PluginCheck.Security.DirectDB.UnescapedDBParameter -- 自定义插件表名固定且来自 $wpdb->prefix，字段值仍通过 prepare() 绑定。
+	$payment = $wpdb->get_row(
+		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- WordPress 6.1 及以下不支持 %i，占位值仅用于 order_id，表名已通过 esc_sql() 处理。
+		$wpdb->prepare(
+			'SELECT * FROM ' . $table . ' WHERE order_id = %s',
+			$order_id
+		)
+		// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
+	);
+
+	wp_cache_set($cache_key, $payment, 'ponponpay_payments', 5 * MINUTE_IN_SECONDS);
+
+	return $payment;
+}
+
+/**
+ * 清理支付记录缓存。
+ *
+ * @param string $order_id 订单号
+ */
+function ponponpay_delete_payment_cache($order_id)
+{
+	wp_cache_delete(ponponpay_payment_cache_key($order_id), 'ponponpay_payments');
+}
+
+/**
+ * 新增 PonponPay 支付记录。
+ *
+ * @param array $data 支付记录数据
+ * @return int|false
+ */
+function ponponpay_insert_payment($data)
+{
+	global $wpdb;
+
+	$table = ponponpay_payments_table();
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- 写入自定义插件表，WordPress 没有对应的高级 API。
+	$result = $wpdb->insert($table, $data);
+
+	if (!empty($data['order_id'])) {
+		ponponpay_delete_payment_cache($data['order_id']);
+	}
+
+	return $result;
+}
+
+/**
+ * 更新 PonponPay 支付记录。
+ *
+ * @param string $order_id 订单号
+ * @param array  $data     更新数据
+ * @return int|false
+ */
+function ponponpay_update_payment($order_id, $data)
+{
+	global $wpdb;
+
+	$order_id = sanitize_text_field((string)$order_id);
+	if ($order_id === '') {
+		return false;
+	}
+
+	$table = ponponpay_payments_table();
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- 更新自定义插件表，且会立即清理对象缓存。
+	$result = $wpdb->update($table, $data, ['order_id' => $order_id]);
+
+	ponponpay_delete_payment_cache($order_id);
+
+	return $result;
+}
+
+/**
  * 注册 WooCommerce 支付网关（仅在 WooCommerce 可用时）
  */
 function ponponpay_add_wc_gateway($gateways)
@@ -217,7 +333,7 @@ add_action('wp_enqueue_scripts', 'ponponpay_enqueue_scripts');
 function ponponpay_activate()
 {
 	global $wpdb;
-	$table = $wpdb->prefix . 'ponponpay_payments';
+	$table = ponponpay_payments_table();
 	$charset = $wpdb->get_charset_collate();
 
 	$sql = "CREATE TABLE IF NOT EXISTS {$table} (

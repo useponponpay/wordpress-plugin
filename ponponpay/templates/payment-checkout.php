@@ -36,15 +36,7 @@ if (empty($ponponpay_order_id)) {
 	wp_die(esc_html($ponponpay_i18n['invalid_request']));
 }
 
-// 查询订单
-global $wpdb;
-$ponponpay_table = $wpdb->prefix . 'ponponpay_payments';
-$ponponpay_payment = $wpdb->get_row(
-	$wpdb->prepare(
-		'SELECT * FROM ' . esc_sql($ponponpay_table) . ' WHERE order_id = %s',
-		$ponponpay_order_id
-	)
-);
+$ponponpay_payment = ponponpay_get_payment($ponponpay_order_id);
 
 $ponponpay_is_wc_order = false;
 $ponponpay_amount = 0;

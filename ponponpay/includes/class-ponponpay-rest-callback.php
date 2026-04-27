@@ -131,9 +131,7 @@ class PonponPay_REST_Callback
 		// 生成商户订单号
 		$mch_order_id = 'WP_' . time() . '_' . substr(md5($api_key . '_' . $amount . '_' . wp_generate_uuid4()), 0, 8);
 
-		global $wpdb;
-		$table = $wpdb->prefix . 'ponponpay_payments';
-		$wpdb->insert($table, [
+		ponponpay_insert_payment([
 			'order_id' => $mch_order_id,
 			'amount' => $amount,
 			'fiat_currency' => $fiat_currency,
@@ -173,9 +171,7 @@ class PonponPay_REST_Callback
 			return new WP_REST_Response(['success' => false, 'error' => 'Missing parameters'], 400);
 		}
 
-		global $wpdb;
-		$table = $wpdb->prefix . 'ponponpay_payments';
-		$payment = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$table} WHERE order_id = %s", $order_id));
+		$payment = ponponpay_get_payment($order_id);
 
 		$amount = 0;
 		$redirect_url = '';
@@ -233,12 +229,12 @@ class PonponPay_REST_Callback
 		$payment_url = $result['data']['payment_url'] ?? '';
 
 		if ($payment) {
-			$wpdb->update($table, [
+			ponponpay_update_payment($order_id, [
 				'trade_id' => $trade_id,
 				'crypto_currency' => $currency,
 				'network' => $network,
 				'payment_url' => $payment_url,
-			], ['order_id' => $order_id]);
+			]);
 		} else if (isset($wc_order)) {
 			$wc_order->add_meta_data('_ponponpay_trade_id', $trade_id, true);
 			$wc_order->add_meta_data('_ponponpay_payment_url', $payment_url, true);
@@ -327,13 +323,7 @@ class PonponPay_REST_Callback
 	 */
 	private function process_standalone_callback($order_no, $status, $data)
 	{
-		global $wpdb;
-		$table = $wpdb->prefix . 'ponponpay_payments';
-
-		// 查询支付记录
-		$payment = $wpdb->get_row(
-			$wpdb->prepare("SELECT * FROM {$table} WHERE order_id = %s", $order_no)
-		);
+		$payment = ponponpay_get_payment($order_no);
 
 		if (!$payment) {
 			$this->log("Payment not found: {$order_no}");
@@ -351,10 +341,10 @@ class PonponPay_REST_Callback
 		switch ($status) {
 			case 2: // 支付成功
 			case 5: // 人工充值
-				$wpdb->update($table, [
+				ponponpay_update_payment($order_no, [
 					'status' => 1,
 					'tx_hash' => $tx_hash,
-				], ['order_id' => $order_no]);
+				]);
 				$this->log("Payment completed: {$order_no}, TX: {$tx_hash}");
 
 				// 触发 WordPress action 钩子
@@ -362,12 +352,12 @@ class PonponPay_REST_Callback
 				break;
 
 			case 3: // 过期
-				$wpdb->update($table, ['status' => 2], ['order_id' => $order_no]);
+				ponponpay_update_payment($order_no, ['status' => 2]);
 				do_action('ponponpay_payment_expired', $payment, $data);
 				break;
 
 			case 4: // 取消
-				$wpdb->update($table, ['status' => 3], ['order_id' => $order_no]);
+				ponponpay_update_payment($order_no, ['status' => 3]);
 				do_action('ponponpay_payment_cancelled', $payment, $data);
 				break;
 		}
@@ -382,8 +372,13 @@ class PonponPay_REST_Callback
 	 */
 	private function log($message)
 	{
-		if (defined('WP_DEBUG') && WP_DEBUG) {
-			error_log('[PonponPay] ' . $message);
+		if (function_exists('wc_get_logger')) {
+			wc_get_logger()->info($message, ['source' => 'ponponpay']);
+			return;
+		}
+
+		if (function_exists('wp_debug_log')) {
+			wp_debug_log('[PonponPay] ' . $message);
 		}
 	}
 
