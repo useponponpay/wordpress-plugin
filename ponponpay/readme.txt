@@ -90,16 +90,25 @@ Initial release.
 
 == External Services ==
 
-This plugin connects to the PonponPay service to create payment orders, fetch available payment methods, validate API access, and receive payment status updates.
+This plugin connects to the PonponPay API, an external cryptocurrency payment gateway service provided by PonponPay. The service is required to validate merchant API access, fetch available cryptocurrency payment methods, create payment orders, query payment order details, host the customer cryptocurrency checkout flow, and send payment status callbacks back to the WordPress site.
 
-It sends data to PonponPay only when needed for payment processing, including:
+The plugin sends data to PonponPay only when the store administrator or customer uses a PonponPay payment feature:
+
+* When an administrator saves or verifies the API Key, the plugin sends the API Key and plugin type to validate the merchant connection.
+* When a checkout page or payment button loads available payment methods, the plugin sends the API Key to request the merchant's enabled payment methods.
+* When a customer creates a payment order, the plugin sends the API Key, payment amount, fiat currency, merchant order ID, selected cryptocurrency, selected blockchain network, callback URL, and redirect URL.
+* When an order detail lookup is needed, the plugin sends the API Key and payment identifiers such as trade ID or merchant order ID.
+* When PonponPay sends a payment callback to the site, the callback may include payment status, merchant order ID, trade ID, transaction hash, cryptocurrency, blockchain network, and paid amount.
+
+Data sent to PonponPay may include:
 
 * API Key in the request header for authentication
 * Payment amount and fiat currency
 * Merchant order ID
+* Selected cryptocurrency and blockchain network
 * Redirect URL after payment
 * Callback URL for payment notifications
-* Payment identifiers such as trade ID or order number
+* Payment identifiers such as trade ID, order number, and transaction hash
 
 Service endpoints used by the plugin include:
 
@@ -115,3 +124,11 @@ Service homepage:
 Service documentation:
 
 * `https://ponponpay.com/docs`
+
+Terms of Service:
+
+* `https://ponponpay.com/terms`
+
+Privacy Policy:
+
+* `https://ponponpay.com/privacy`

@@ -241,7 +241,12 @@ class PonponPay_Settings
 			$api = new PonponPay_API($sanitized['api_key']);
 			$result = $api->activate_plugin();
 			$debug_context = $api->get_last_debug_context();
-			$log_file = PonponPay_API::get_debug_log_file();
+			$log_file = defined('WP_DEBUG') && WP_DEBUG ? PonponPay_API::get_debug_log_file() : '';
+			$debug_log_message = $log_file !== '' ? ' ' . sprintf(
+				/* translators: %s: debug log file path */
+				__('(Debug log: %s)', 'ponponpay-crypto-payment-gateway'),
+				$log_file
+			) : '';
 
 			if (is_wp_error($result)) {
 				$this->log_api_key_validation_failure('wp_error', [
@@ -253,12 +258,7 @@ class PonponPay_Settings
 				add_settings_error(
 					'ponponpay_messages',
 					'ponponpay_api_error',
-					__('PonponPay API connection failed: ', 'ponponpay-crypto-payment-gateway') . $result->get_error_message() . ' ' .
-						sprintf(
-							/* translators: %s: debug log file path */
-							__('(Debug log: %s)', 'ponponpay-crypto-payment-gateway'),
-							$log_file
-						),
+					__('PonponPay API connection failed: ', 'ponponpay-crypto-payment-gateway') . $result->get_error_message() . $debug_log_message,
 					'error'
 				);
 			} elseif (!isset($result['code']) || $result['code'] != 0) {
@@ -269,12 +269,7 @@ class PonponPay_Settings
 				add_settings_error(
 					'ponponpay_messages',
 					'ponponpay_activation_error',
-					__('Plugin activation failed: ', 'ponponpay-crypto-payment-gateway') . ($result['message'] ?? 'Unknown error') . ' ' .
-						sprintf(
-							/* translators: %s: debug log file path */
-							__('(Debug log: %s)', 'ponponpay-crypto-payment-gateway'),
-							$log_file
-						),
+					__('Plugin activation failed: ', 'ponponpay-crypto-payment-gateway') . ($result['message'] ?? 'Unknown error') . $debug_log_message,
 					'error'
 				);
 			} else {
@@ -299,13 +294,23 @@ class PonponPay_Settings
 	 */
 	private function log_api_key_validation_failure($type, $payload)
 	{
+		if (!defined('WP_DEBUG') || !WP_DEBUG) {
+			return;
+		}
+
+		$log_file = PonponPay_API::get_debug_log_file();
+		if ($log_file === '') {
+			return;
+		}
+
 		$log_line = [
 			'time' => gmdate('c'),
 			'type' => $type,
 			'payload' => $payload,
 		];
 		$encoded = wp_json_encode($log_line, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-		file_put_contents(PonponPay_API::get_debug_log_file(), $encoded . PHP_EOL, FILE_APPEND);
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Debug logs are written to a plugin-specific directory under wp-content/uploads.
+		file_put_contents($log_file, $encoded . PHP_EOL, FILE_APPEND);
 	}
 
 	/**

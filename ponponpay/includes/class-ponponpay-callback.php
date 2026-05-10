@@ -37,21 +37,23 @@ class PonponPay_Callback
 
 		try {
 			// 获取回调数据
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- The raw request body is required for PonponPay signature verification.
 			$input = file_get_contents('php://input');
-			$logger->info('Callback received: ' . $input, ['source' => 'ponponpay']);
+			$logger->info(
+				'Callback request received. Body length: ' . strlen((string)$input) . ', body hash: ' . hash('sha256', (string)$input),
+				['source' => 'ponponpay']
+			);
 
 			$data = json_decode($input, true);
 
-			if (!$data) {
+			if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
 				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- PonponPay 服务端回调无法携带 WordPress nonce，下面会用签名头校验请求来源。
 				$data = map_deep(wp_unslash($_POST), 'sanitize_text_field');
 			}
 
 			// 对 json_decode 后的数据进行字段级消毒
 			if (is_array($data)) {
-				$data = array_map(function ($value) {
-					return is_string($value) ? sanitize_text_field($value) : $value;
-				}, $data);
+				$data = map_deep($data, 'sanitize_text_field');
 			}
 
 			// 验证必要字段
@@ -111,7 +113,7 @@ class PonponPay_Callback
 
 			// 处理不同的支付状态
 			// 1-等待支付，2-支付成功，3-已过期，4-取消支付，5-人工充值
-			$status = $data['status'];
+			$status = absint($data['status']);
 
 			$logger->info("Processing callback for order #{$order_id}, status: {$status}", ['source' => 'ponponpay']);
 

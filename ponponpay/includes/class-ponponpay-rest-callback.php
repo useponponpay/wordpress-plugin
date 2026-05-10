@@ -268,9 +268,7 @@ class PonponPay_REST_Callback
 
 		// 对 JSON 解码后的数据进行字段级消毒
 		if (is_array($data)) {
-			$data = array_map(function ($value) {
-				return is_string($value) ? sanitize_text_field($value) : $value;
-			}, $data);
+			$data = map_deep($data, 'sanitize_text_field');
 		}
 
 		// 验证必要字段

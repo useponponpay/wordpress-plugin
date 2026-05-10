@@ -99,7 +99,26 @@ class PonponPay_API
 	 */
 	public static function get_debug_log_file()
 	{
-		return '/tmp/ponponpay-debug.log';
+		$upload_dir = wp_upload_dir();
+		$base_dir = trailingslashit($upload_dir['basedir']) . 'ponponpay';
+
+		if (!wp_mkdir_p($base_dir)) {
+			return '';
+		}
+
+		$index_file = trailingslashit($base_dir) . 'index.html';
+		if (!file_exists($index_file)) {
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Creates a small index file in the uploads directory to prevent directory listing.
+			file_put_contents($index_file, '');
+		}
+
+		$htaccess_file = trailingslashit($base_dir) . '.htaccess';
+		if (!file_exists($htaccess_file)) {
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Protects plugin log files stored under wp-content/uploads.
+			file_put_contents($htaccess_file, "Deny from all\n");
+		}
+
+		return trailingslashit($base_dir) . 'ponponpay-debug.log';
 	}
 
 	/**
@@ -140,12 +159,12 @@ class PonponPay_API
 			'endpoint' => $endpoint,
 			'url' => $url,
 			'timeout' => $this->timeout,
-			'request_body' => $data,
-			'api_key_prefix' => substr((string)$this->api_key, 0, 12),
+			'request_body_keys' => array_keys((array)$data),
+			'api_key_prefix' => self::mask_value($this->api_key),
 		];
 		$this->write_debug_log("[$request_id] Request URL: {$url}");
-		$this->write_debug_log("[$request_id] API Key Prefix: " . substr($this->api_key, 0, 12) . '...');
-		$this->write_debug_log("[$request_id] Request Body: " . wp_json_encode($data));
+		$this->write_debug_log("[$request_id] API Key Prefix: " . self::mask_value($this->api_key));
+		$this->write_debug_log("[$request_id] Request Body Keys: " . wp_json_encode(array_keys((array)$data)));
 
 		$response = wp_remote_post($url, $args);
 
@@ -168,11 +187,11 @@ class PonponPay_API
 		$this->last_debug_context['http_code'] = $http_code;
 		$this->last_debug_context['http_message'] = $response_message;
 		$this->last_debug_context['response_headers'] = $response_headers;
-		$this->last_debug_context['response_body'] = $body;
+		$this->last_debug_context['response_body_length'] = strlen((string)$body);
 		$this->write_debug_log("[$request_id] HTTP Code: {$http_code}");
 		$this->write_debug_log("[$request_id] HTTP Message: {$response_message}");
 		$this->write_debug_log("[$request_id] Response Headers: " . wp_json_encode($response_headers));
-		$this->write_debug_log("[$request_id] Response Body: {$body}");
+		$this->write_debug_log("[$request_id] Response Body Length: " . strlen((string)$body));
 
 		$decoded = json_decode($body, true);
 		$this->last_debug_context['decoded'] = $decoded;
@@ -206,7 +225,33 @@ class PonponPay_API
 	 */
 	private function write_debug_log($message)
 	{
+		if (!defined('WP_DEBUG') || !WP_DEBUG) {
+			return;
+		}
+
+		$log_file = self::get_debug_log_file();
+		if ($log_file === '') {
+			return;
+		}
+
 		$line = gmdate('Y-m-d H:i:s') . ' ' . $message . PHP_EOL;
-		file_put_contents(self::get_debug_log_file(), $line, FILE_APPEND);
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Debug logs are written to a plugin-specific directory under wp-content/uploads.
+		file_put_contents($log_file, $line, FILE_APPEND);
+	}
+
+	/**
+	 * Mask a sensitive value before it is shown in diagnostics.
+	 *
+	 * @param string $value Sensitive value.
+	 * @return string
+	 */
+	private static function mask_value($value)
+	{
+		$value = (string)$value;
+		if ($value === '') {
+			return '';
+		}
+
+		return substr($value, 0, 8) . '...';
 	}
 }
