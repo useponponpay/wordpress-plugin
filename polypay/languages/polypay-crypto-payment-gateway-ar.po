@@ -1,0 +1,219 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PolyPay - Crypto Payment Gateway 1.0.0\n"
+"POT-Creation-Date: 2026-03-09 14:28+0800\n"
+"PO-Revision-Date: 2026-03-09 14:28+0800\n"
+"Last-Translator: PolyPay <support@polypay.ai>\n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+
+msgid "(Debug log: %s)"
+msgstr "(سجل التصحيح: %s)"
+
+msgid "API Configuration"
+msgstr "إعدادات API"
+
+msgid "API Key"
+msgstr "مفتاح API"
+
+msgid "API Key verified successfully!"
+msgstr "تم التحقق من مفتاح API بنجاح!"
+
+msgid "Accept cryptocurrency payments (USDT, USDC, etc.) via PolyPay. Supports Tron, Ethereum, BSC, Polygon, Solana networks."
+msgstr "اقبل مدفوعات العملات الرقمية (USDT وUSDC وغيرها) عبر PolyPay. يدعم شبكات Tron وEthereum وBSC وPolygon وSolana."
+
+msgid "Awaiting PolyPay crypto payment."
+msgstr "بانتظار دفعة PolyPay بالعملات الرقمية."
+
+msgid "Basic Usage"
+msgstr "الاستخدام الأساسي"
+
+msgid "Button label"
+msgstr "نص الزر"
+
+msgid "Callback URL: %s"
+msgstr "رابط الاستدعاء: %s"
+
+msgid "Configure your PolyPay API credentials. Get your API Key from"
+msgstr "قم بإعداد بيانات اعتماد API الخاصة بـ PolyPay هنا. احصل على مفتاح API من"
+
+msgid "Crypto Payment (PolyPay)"
+msgstr "الدفع بالعملات الرقمية (PolyPay)"
+
+msgid "Currency:"
+msgstr "العملة:"
+
+msgid "Default"
+msgstr "الافتراضي"
+
+msgid "Description"
+msgstr "الوصف"
+
+msgid "Enable PolyPay Crypto Payment"
+msgstr "تفعيل الدفع الرقمي عبر PolyPay"
+
+msgid "Enable/Disable"
+msgstr "تفعيل/تعطيل"
+
+msgid "Enter your PolyPay API Key"
+msgstr "أدخل مفتاح API الخاص بـ PolyPay"
+
+msgid "Enter your PolyPay API Key. Get it from %s."
+msgstr "أدخل مفتاح API الخاص بـ PolyPay. يمكنك الحصول عليه من %s."
+
+msgid "Failed to initialize payment"
+msgstr "فشل تهيئة الدفع"
+
+msgid "Fiat currency code"
+msgstr "رمز العملة الورقية"
+
+msgid "Full Parameters"
+msgstr "جميع المعاملات"
+
+msgid "Initializing payment..."
+msgstr "جارٍ تهيئة الدفع..."
+
+msgid "Network error. Please try again."
+msgstr "خطأ في الشبكة. يرجى المحاولة مرة أخرى."
+
+msgid "Network:"
+msgstr "الشبكة:"
+
+msgid "Parameter"
+msgstr "المعامل"
+
+msgid "Parameters"
+msgstr "المعاملات"
+
+msgid "Pay with Crypto"
+msgstr "الدفع بالعملات الرقمية"
+
+msgid "Pay with USDT, USDC and other cryptocurrencies via PolyPay."
+msgstr "ادفع باستخدام USDT وUSDC وغيرها من العملات الرقمية عبر PolyPay."
+
+msgid "Pay with USDT, USDC and other cryptocurrencies. Supports Tron, Ethereum, BSC, Polygon, Solana networks."
+msgstr "ادفع باستخدام USDT وUSDC وغيرها من العملات الرقمية. يدعم شبكات Tron وEthereum وBSC وPolygon وSolana."
+
+msgid "Payment amount"
+msgstr "مبلغ الدفع"
+
+msgid "Payment description"
+msgstr "وصف الدفع"
+
+msgid "Payment method description displayed to customers at checkout."
+msgstr "وصف طريقة الدفع الظاهر للعملاء عند إتمام الشراء."
+
+msgid "Payment method title displayed to customers at checkout."
+msgstr "عنوان طريقة الدفع الظاهر للعملاء عند إتمام الشراء."
+
+msgid "Plugin activation failed: "
+msgstr "فشل تفعيل الإضافة: "
+
+msgid "PolyPay"
+msgstr "PolyPay"
+
+msgid "PolyPay - Crypto Payment"
+msgstr "PolyPay - الدفع بالعملات الرقمية"
+
+msgid "PolyPay API Key verified successfully!"
+msgstr "تم التحقق من مفتاح API الخاص بـ PolyPay بنجاح!"
+
+msgid "PolyPay API connection failed: "
+msgstr "فشل الاتصال بواجهة PolyPay API: "
+
+msgid "PolyPay Settings"
+msgstr "إعدادات PolyPay"
+
+msgid "PolyPay Trade ID:"
+msgstr "معرّف معاملة PolyPay:"
+
+msgid "PolyPay is not properly configured. Please contact the store administrator."
+msgstr "لم يتم إعداد PolyPay بشكل صحيح. يرجى التواصل مع مدير المتجر."
+
+msgid "PolyPay payment completed. Transaction: %1$s, Currency: %2$s, Network: %3$s"
+msgstr "اكتمل دفع PolyPay. المعاملة: %1$s، العملة: %2$s، الشبكة: %3$s"
+
+msgid "PolyPay plugin activation failed: "
+msgstr "فشل تفعيل إضافة PolyPay: "
+
+msgid "PolyPay: Payment cancelled."
+msgstr "PolyPay: تم إلغاء الدفع."
+
+msgid "PolyPay: Payment expired."
+msgstr "PolyPay: انتهت صلاحية الدفع."
+
+msgid "Required"
+msgstr "مطلوب"
+
+msgid "Settings"
+msgstr "الإعدادات"
+
+msgid "Shortcode Usage"
+msgstr "استخدام الشورت كود"
+
+msgid "Title"
+msgstr "العنوان"
+
+msgid "URL to redirect after payment"
+msgstr "رابط إعادة التوجيه بعد الدفع"
+
+msgid "Unknown error"
+msgstr "خطأ غير معروف"
+
+msgid "WooCommerce detected! PolyPay is available as a payment gateway in WooCommerce → Settings → Payments."
+msgstr "تم اكتشاف WooCommerce! أصبح PolyPay متاحًا كبوابة دفع في WooCommerce → Settings → Payments."
+
+msgid "[PolyPay] Error: API Key not configured. Go to Settings → PolyPay."
+msgstr "[PolyPay] خطأ: لم يتم إعداد مفتاح API. انتقل إلى Settings → PolyPay."
+
+msgid "[PolyPay] Error: amount parameter is required."
+msgstr "[PolyPay] خطأ: المعامل amount مطلوب."
+
+msgid "Invalid request"
+msgstr "طلب غير صالح"
+
+msgid "Order not found"
+msgstr "الطلب غير موجود"
+
+msgid "PolyPay Checkout"
+msgstr "الدفع عبر PolyPay"
+
+msgid "Selected"
+msgstr "المحدد"
+
+msgid "Select Payment Method"
+msgstr "اختر طريقة الدفع"
+
+msgid "Loading methods..."
+msgstr "جارٍ تحميل طرق الدفع..."
+
+msgid "Confirm & Pay"
+msgstr "تأكيد الدفع"
+
+msgid "Cancel and return"
+msgstr "إلغاء والعودة"
+
+msgid "Processing..."
+msgstr "جارٍ المعالجة..."
+
+msgid "Secured by"
+msgstr "مؤمّن بواسطة"
+
+msgid "No payment methods available"
+msgstr "لا توجد طرق دفع متاحة"
+
+msgid "No payment methods available. Contact administrator."
+msgstr "لا توجد طرق دفع متاحة. يرجى التواصل مع المسؤول."
+
+msgid "Network error while loading methods."
+msgstr "خطأ في الشبكة أثناء تحميل طرق الدفع."
+
+msgid "Failed to create order"
+msgstr "فشل إنشاء الطلب"
+
+msgid "Network error while creating order."
+msgstr "خطأ في الشبكة أثناء إنشاء الطلب."

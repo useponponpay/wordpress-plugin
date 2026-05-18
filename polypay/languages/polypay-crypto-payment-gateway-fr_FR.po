@@ -1,0 +1,219 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PolyPay - Crypto Payment Gateway 1.0.0\n"
+"POT-Creation-Date: 2026-03-09 14:28+0800\n"
+"PO-Revision-Date: 2026-03-09 14:28+0800\n"
+"Last-Translator: PolyPay <support@polypay.ai>\n"
+"Language-Team: French\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "(Debug log: %s)"
+msgstr "(Journal de debug : %s)"
+
+msgid "API Configuration"
+msgstr "Configuration API"
+
+msgid "API Key"
+msgstr "Clé API"
+
+msgid "API Key verified successfully!"
+msgstr "La clé API a été vérifiée avec succès !"
+
+msgid "Accept cryptocurrency payments (USDT, USDC, etc.) via PolyPay. Supports Tron, Ethereum, BSC, Polygon, Solana networks."
+msgstr "Acceptez les paiements en cryptomonnaies (USDT, USDC, etc.) via PolyPay. Compatible avec les réseaux Tron, Ethereum, BSC, Polygon et Solana."
+
+msgid "Awaiting PolyPay crypto payment."
+msgstr "En attente du paiement crypto PolyPay."
+
+msgid "Basic Usage"
+msgstr "Utilisation de base"
+
+msgid "Button label"
+msgstr "Libellé du bouton"
+
+msgid "Callback URL: %s"
+msgstr "URL de rappel : %s"
+
+msgid "Configure your PolyPay API credentials. Get your API Key from"
+msgstr "Configurez ici vos identifiants API PolyPay. Obtenez votre clé API sur"
+
+msgid "Crypto Payment (PolyPay)"
+msgstr "Paiement crypto (PolyPay)"
+
+msgid "Currency:"
+msgstr "Devise :"
+
+msgid "Default"
+msgstr "Par défaut"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Enable PolyPay Crypto Payment"
+msgstr "Activer le paiement crypto PolyPay"
+
+msgid "Enable/Disable"
+msgstr "Activer/Désactiver"
+
+msgid "Enter your PolyPay API Key"
+msgstr "Saisissez votre clé API PolyPay"
+
+msgid "Enter your PolyPay API Key. Get it from %s."
+msgstr "Saisissez votre clé API PolyPay. Obtenez-la depuis %s."
+
+msgid "Failed to initialize payment"
+msgstr "Échec de l'initialisation du paiement"
+
+msgid "Fiat currency code"
+msgstr "Code de devise fiduciaire"
+
+msgid "Full Parameters"
+msgstr "Paramètres complets"
+
+msgid "Initializing payment..."
+msgstr "Initialisation du paiement..."
+
+msgid "Network error. Please try again."
+msgstr "Erreur réseau. Veuillez réessayer."
+
+msgid "Network:"
+msgstr "Réseau :"
+
+msgid "Parameter"
+msgstr "Paramètre"
+
+msgid "Parameters"
+msgstr "Paramètres"
+
+msgid "Pay with Crypto"
+msgstr "Payer en crypto"
+
+msgid "Pay with USDT, USDC and other cryptocurrencies via PolyPay."
+msgstr "Payez avec USDT, USDC et d'autres cryptomonnaies via PolyPay."
+
+msgid "Pay with USDT, USDC and other cryptocurrencies. Supports Tron, Ethereum, BSC, Polygon, Solana networks."
+msgstr "Payez avec USDT, USDC et d'autres cryptomonnaies. Compatible avec les réseaux Tron, Ethereum, BSC, Polygon et Solana."
+
+msgid "Payment amount"
+msgstr "Montant du paiement"
+
+msgid "Payment description"
+msgstr "Description du paiement"
+
+msgid "Payment method description displayed to customers at checkout."
+msgstr "Description du moyen de paiement affichée aux clients lors du passage en caisse."
+
+msgid "Payment method title displayed to customers at checkout."
+msgstr "Titre du moyen de paiement affiché aux clients lors du passage en caisse."
+
+msgid "Plugin activation failed: "
+msgstr "L'activation du plugin a échoué : "
+
+msgid "PolyPay"
+msgstr "PolyPay"
+
+msgid "PolyPay - Crypto Payment"
+msgstr "PolyPay - Paiement crypto"
+
+msgid "PolyPay API Key verified successfully!"
+msgstr "La clé API PolyPay a été vérifiée avec succès !"
+
+msgid "PolyPay API connection failed: "
+msgstr "La connexion à l'API PolyPay a échoué : "
+
+msgid "PolyPay Settings"
+msgstr "Réglages PolyPay"
+
+msgid "PolyPay Trade ID:"
+msgstr "ID de transaction PolyPay :"
+
+msgid "PolyPay is not properly configured. Please contact the store administrator."
+msgstr "PolyPay n'est pas correctement configuré. Veuillez contacter l'administrateur de la boutique."
+
+msgid "PolyPay payment completed. Transaction: %1$s, Currency: %2$s, Network: %3$s"
+msgstr "Paiement PolyPay terminé. Transaction : %1$s, devise : %2$s, réseau : %3$s"
+
+msgid "PolyPay plugin activation failed: "
+msgstr "L'activation du plugin PolyPay a échoué : "
+
+msgid "PolyPay: Payment cancelled."
+msgstr "PolyPay : paiement annulé."
+
+msgid "PolyPay: Payment expired."
+msgstr "PolyPay : paiement expiré."
+
+msgid "Required"
+msgstr "Obligatoire"
+
+msgid "Settings"
+msgstr "Réglages"
+
+msgid "Shortcode Usage"
+msgstr "Utilisation du shortcode"
+
+msgid "Title"
+msgstr "Titre"
+
+msgid "URL to redirect after payment"
+msgstr "URL de redirection après paiement"
+
+msgid "Unknown error"
+msgstr "Erreur inconnue"
+
+msgid "WooCommerce detected! PolyPay is available as a payment gateway in WooCommerce → Settings → Payments."
+msgstr "WooCommerce détecté ! PolyPay est disponible comme passerelle de paiement dans WooCommerce → Settings → Payments."
+
+msgid "[PolyPay] Error: API Key not configured. Go to Settings → PolyPay."
+msgstr "[PolyPay] Erreur : la clé API n'est pas configurée. Allez dans Settings → PolyPay."
+
+msgid "[PolyPay] Error: amount parameter is required."
+msgstr "[PolyPay] Erreur : le paramètre amount est requis."
+
+msgid "Invalid request"
+msgstr "Requête invalide"
+
+msgid "Order not found"
+msgstr "Commande introuvable"
+
+msgid "PolyPay Checkout"
+msgstr "Paiement PolyPay"
+
+msgid "Selected"
+msgstr "Sélectionné"
+
+msgid "Select Payment Method"
+msgstr "Sélectionner le mode de paiement"
+
+msgid "Loading methods..."
+msgstr "Chargement des moyens de paiement..."
+
+msgid "Confirm & Pay"
+msgstr "Confirmer et payer"
+
+msgid "Cancel and return"
+msgstr "Annuler et revenir"
+
+msgid "Processing..."
+msgstr "Traitement en cours..."
+
+msgid "Secured by"
+msgstr "Sécurisé par"
+
+msgid "No payment methods available"
+msgstr "Aucun moyen de paiement disponible"
+
+msgid "No payment methods available. Contact administrator."
+msgstr "Aucun moyen de paiement disponible. Contactez l’administrateur."
+
+msgid "Network error while loading methods."
+msgstr "Erreur réseau lors du chargement des moyens de paiement."
+
+msgid "Failed to create order"
+msgstr "Échec de la création de la commande"
+
+msgid "Network error while creating order."
+msgstr "Erreur réseau lors de la création de la commande."

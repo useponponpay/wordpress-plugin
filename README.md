@@ -1,8 +1,8 @@
 🌐 [English](README.md) | [中文](README.zh.md) | [日本語](README.ja.md) | [한국어](README.ko.md) | [Deutsch](README.de.md) | [Español](README.es.md) | [Français](README.fr.md) | [Português](README.pt.md) | [Русский](README.ru.md) | [العربية](README.ar.md)
 
-# PonponPay WordPress Payment Plugin
+# PolyPay WordPress Payment Plugin
 
-Accept cryptocurrency payments (USDT, USDC, etc.) on **any WordPress site** via [PonponPay](https://ponponpay.com). Works standalone with shortcodes or integrates with WooCommerce.
+Accept cryptocurrency payments (USDT, USDC, etc.) on **any WordPress site** via [PolyPay](https://polypay.ai). Works standalone with shortcodes or integrates with WooCommerce.
 
 Supported networks: **Tron (TRC20)** · **Ethereum (ERC20)** · **BSC (BEP20)** · **Polygon** · **Solana**
 
@@ -13,7 +13,7 @@ Supported networks: **Tron (TRC20)** · **Ethereum (ERC20)** · **BSC (BEP20)** 
 - ✅ **Works on any WordPress site** — No WooCommerce required
 - ✅ **Shortcode support** — Embed payment buttons on any page or post
 - ✅ **WooCommerce integration** — Auto-detected, registers as payment gateway
-- ✅ **Independent settings page** — Settings → PonponPay
+- ✅ **Independent settings page** — Settings → PolyPay
 - ✅ **Payment records** — Built-in payment tracking table
 - ✅ **WooCommerce HPOS** compatible
 
@@ -21,9 +21,9 @@ Supported networks: **Tron (TRC20)** · **Ethereum (ERC20)** · **BSC (BEP20)** 
 
 ## Prerequisites
 
-> **⚠️ Before installing, complete these steps at [ponponpay.com](https://ponponpay.com):**
+> **⚠️ Before installing, complete these steps at [polypay.ai](https://polypay.ai):**
 
-1. **Register an account** at [ponponpay.com](https://ponponpay.com)
+1. **Register an account** at [polypay.ai](https://polypay.ai)
 2. **Add wallet addresses** — At least one receiving wallet (e.g. TRC20 USDT)
 3. **Enable currencies** — Select supported cryptocurrencies per wallet
 4. **Get your API Key** from the API Keys page
@@ -32,23 +32,23 @@ Supported networks: **Tron (TRC20)** · **Ethereum (ERC20)** · **BSC (BEP20)** 
 
 ## Installation
 
-1. Upload the `ponponpay` folder to `/wp-content/plugins/`
+1. Upload the `polypay` folder to `/wp-content/plugins/`
 2. Activate through **Plugins** menu
-3. Go to **Settings → PonponPay** and enter your API Key
+3. Go to **Settings → PolyPay** and enter your API Key
 
 ```
-ponponpay/                       →  wp-content/plugins/ponponpay/
-├── ponponpay.php                         # Plugin entry point
+polypay/                       →  wp-content/plugins/polypay/
+├── polypay.php                         # Plugin entry point
 ├── includes/
-│   ├── class-ponponpay-api.php           # PonponPay API client
-│   ├── class-ponponpay-settings.php      # Standalone settings page
-│   ├── class-ponponpay-shortcode.php     # [ponponpay_button] shortcode
-│   ├── class-ponponpay-rest-callback.php # REST API callback handler
-│   ├── class-ponponpay-gateway.php       # WooCommerce gateway (optional)
-│   └── class-ponponpay-callback.php      # WooCommerce callback (optional)
+│   ├── class-polypay-api.php           # PolyPay API client
+│   ├── class-polypay-settings.php      # Standalone settings page
+│   ├── class-polypay-shortcode.php     # [polypay_button] shortcode
+│   ├── class-polypay-rest-callback.php # REST API callback handler
+│   ├── class-polypay-gateway.php       # WooCommerce gateway (optional)
+│   └── class-polypay-callback.php      # WooCommerce callback (optional)
 ├── assets/
-│   ├── css/ponponpay.css
-│   └── js/ponponpay.js
+│   ├── css/polypay.css
+│   └── js/polypay.js
 └── templates/
     └── payment-checkout.php              # Standalone checkout page template
 ```
@@ -62,13 +62,13 @@ ponponpay/                       →  wp-content/plugins/ponponpay/
 Embed a payment button on any page or post:
 
 ```
-[ponponpay_button amount="99.99"]
+[polypay_button amount="99.99"]
 ```
 
 **Full parameters:**
 
 ```
-[ponponpay_button amount="99.99" fiat_currency="USD" description="Premium Plan" button_text="Pay with Crypto" redirect_url="https://example.com/thank-you"]
+[polypay_button amount="99.99" fiat_currency="USD" description="Premium Plan" button_text="Pay with Crypto" redirect_url="https://example.com/thank-you"]
 ```
 
 | Parameter | Required | Default | Description |
@@ -81,11 +81,11 @@ Embed a payment button on any page or post:
 
 ### Mode 2: WooCommerce Payment Gateway
 
-If WooCommerce is installed, PonponPay automatically appears in:
+If WooCommerce is installed, PolyPay automatically appears in:
 
-**WooCommerce → Settings → Payments → PonponPay**
+**WooCommerce → Settings → Payments → PolyPay**
 
-No additional configuration needed — it uses the same API Key from Settings → PonponPay.
+No additional configuration needed — it uses the same API Key from Settings → PolyPay.
 
 ---
 
@@ -93,22 +93,22 @@ No additional configuration needed — it uses the same API Key from Settings �
 
 ### Shortcode Mode
 ```
-Page/Post with [ponponpay_button] → Customer clicks "Pay with Crypto"
+Page/Post with [polypay_button] → Customer clicks "Pay with Crypto"
 → Selects network & currency → Plugin creates order via API
-→ Redirects to PonponPay payment page → Payment completed
-→ Callback to /wp-json/ponponpay/v1/callback → Record updated
+→ Redirects to PolyPay payment page → Payment completed
+→ Callback to /wp-json/polypay/v1/callback → Record updated
 ```
 
 ### WooCommerce Mode
 ```
-Checkout → Select "Crypto Payment (PonponPay)" → Order created
+Checkout → Select "Crypto Payment (PolyPay)" → Order created
 → Redirects to payment page → Payment completed
-→ Callback to /wc-api/ponponpay → WC order marked as paid
+→ Callback to /wc-api/polypay → WC order marked as paid
 ```
 
 ---
 
 ## Links
 
-- **PonponPay Console**: [https://ponponpay.com](https://ponponpay.com)
-- **Documentation**: [https://ponponpay.com/docs](https://ponponpay.com/docs)
+- **PolyPay Console**: [https://polypay.ai](https://polypay.ai)
+- **Documentation**: [https://polypay.ai/docs](https://polypay.ai/docs)
