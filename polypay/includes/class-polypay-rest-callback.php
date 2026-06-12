@@ -1,11 +1,11 @@
 <?php
 /**
- * PolyPay REST API 回调
+ * PolyPay REST API callback
  *
- * 提供独立的 REST API 端点，不依赖 WooCommerce：
- * - POST /wp-json/polypay/v1/callback     — 接收 PolyPay 支付回调
- * - POST /wp-json/polypay/v1/create-order — 前端创建支付订单
- * - GET  /wp-json/polypay/v1/methods      — 获取可用支付方式
+ * Provides standalone REST API endpoints, without depending on WooCommerce:
+ * - POST /wp-json/polypay/v1/callback     — Receive PolyPay payment callbacks
+ * - POST /wp-json/polypay/v1/create-order — Create payment orders from the front end
+ * - GET  /wp-json/polypay/v1/methods      — Get available payment methods
  *
  * @package PolyPay
  * @version 1.0.0
@@ -18,12 +18,12 @@ if (!defined('ABSPATH')) {
 class PolyPay_REST_Callback
 {
 	/**
-	 * 回调鉴权时间窗口（秒）
+	 * Callback authentication time window (seconds)
 	 */
 	const SIGNATURE_WINDOW_SECONDS = 300;
 
 	/**
-	 * 构造函数
+	 * Constructor
 	 */
 	public function __construct()
 	{
@@ -31,34 +31,34 @@ class PolyPay_REST_Callback
 	}
 
 	/**
-	 * 注册 REST 路由
+	 * Register REST routes
 	 */
 	public function register_routes()
 	{
 		$namespace = 'polypay/v1';
 
-		// 回调端点（PolyPay 后端调用）
+		// Callback endpoint (called by the PolyPay backend)
 		register_rest_route($namespace, '/callback', [
 			'methods' => 'POST',
 			'callback' => [$this, 'handle_callback'],
 			'permission_callback' => '__return_true',
 		]);
 
-		// 初始化订单（前端短代码调用）
+		// Initialize an order (called by the front-end shortcode)
 		register_rest_route($namespace, '/init-payment', [
 			'methods' => 'POST',
 			'callback' => [$this, 'init_payment'],
 			'permission_callback' => [$this, 'verify_frontend_request'],
 		]);
 
-		// 创建订单（前端收银台调用）
+		// Create an order (called by the front-end checkout)
 		register_rest_route($namespace, '/create-order', [
 			'methods' => 'POST',
 			'callback' => [$this, 'create_order'],
 			'permission_callback' => [$this, 'verify_frontend_request'],
 		]);
 
-		// 获取支付方式（前端短代码调用）
+		// Get payment methods (called by the front-end shortcode)
 		register_rest_route($namespace, '/methods', [
 			'methods' => 'GET',
 			'callback' => [$this, 'get_methods'],
@@ -67,7 +67,7 @@ class PolyPay_REST_Callback
 	}
 
 	/**
-	 * 校验前端发起的 REST 请求。
+	 * Verify a REST request initiated from the front end.
 	 *
 	 * @param WP_REST_Request $request
 	 * @return true|WP_Error
@@ -83,7 +83,7 @@ class PolyPay_REST_Callback
 	}
 
 	/**
-	 * 获取支付方式
+	 * Get payment methods
 	 *
 	 * @param WP_REST_Request $request
 	 * @return WP_REST_Response
@@ -107,7 +107,7 @@ class PolyPay_REST_Callback
 	}
 
 	/**
-	 * 初始化支付订单（仅生成本地记录，供短代码等使用）
+	 * Initialize a payment order (only creates a local record, for use by shortcodes etc.)
 	 *
 	 * @param WP_REST_Request $request
 	 * @return WP_REST_Response
@@ -128,14 +128,14 @@ class PolyPay_REST_Callback
 			return new WP_REST_Response(['success' => false, 'error' => 'Invalid amount'], 400);
 		}
 
-		// 生成商户订单号
-		$mch_order_id = 'WP_' . time() . '_' . substr(md5($api_key . '_' . $amount . '_' . wp_generate_uuid4()), 0, 8);
+		// Generate the merchant order number (B{shortened merchant ID}_{timestamp}_{random string}; standalone payment orders are identified via the local payment table)
+		$mch_order_id = 'B' . polypay_merchant_short_id() . '_' . time() . '_' . substr(md5($api_key . '_' . $amount . '_' . wp_generate_uuid4()), 0, 8);
 
 		polypay_insert_payment([
 			'order_id' => $mch_order_id,
 			'amount' => $amount,
 			'fiat_currency' => $fiat_currency,
-			'status' => 0, // 待支付
+			'status' => 0, // Pending payment
 			'description' => $description,
 			'redirect_url' => $redirect_url,
 		]);
@@ -150,7 +150,7 @@ class PolyPay_REST_Callback
 	}
 
 	/**
-	 * 创建支付订单（调用 PolyPay API 下单）
+	 * Create a payment order (places the order via the PolyPay API)
 	 *
 	 * @param WP_REST_Request $request
 	 * @return WP_REST_Response
@@ -177,9 +177,9 @@ class PolyPay_REST_Callback
 		$redirect_url = '';
 
 		if (!$payment) {
-			// 可能是 WooCommerce 订单
-			if (strpos($order_id, 'WC_') === 0 && class_exists('WC_Order')) {
-				$wc_order_id = str_replace('WC_', '', $order_id);
+			// May be a WooCommerce order (B{shortened merchant ID}_{order_id}, backward compatible with the legacy WC_ prefix)
+			$wc_order_id = polypay_parse_wc_order_id($order_id);
+			if ($wc_order_id > 0 && class_exists('WC_Order')) {
 				$wc_order = wc_get_order($wc_order_id);
 				if (!$wc_order) {
 					return new WP_REST_Response(['success' => false, 'error' => 'Order not found'], 404);
@@ -253,7 +253,7 @@ class PolyPay_REST_Callback
 	}
 
 	/**
-	 * 处理 PolyPay 支付回调
+	 * Handle the PolyPay payment callback
 	 *
 	 * @param WP_REST_Request $request
 	 * @return WP_REST_Response
@@ -266,12 +266,12 @@ class PolyPay_REST_Callback
 			$data = $request->get_body_params();
 		}
 
-		// 对 JSON 解码后的数据进行字段级消毒
+		// Sanitize the JSON-decoded data field by field
 		if (is_array($data)) {
 			$data = map_deep($data, 'sanitize_text_field');
 		}
 
-		// 验证必要字段
+		// Validate required fields
 		if (empty($data['order_no']) || empty($data['status'])) {
 			$this->log('Callback missing required fields');
 			return new WP_REST_Response('Missing required fields', 400);
@@ -295,14 +295,13 @@ class PolyPay_REST_Callback
 
 		$this->log("Callback received: {$order_no}, status: {$status}");
 
-		// 判断订单来源
-		if (strpos($order_no, 'WP_') === 0) {
-			// 独立支付记录
+		// Determine the order source: standalone payment orders are recorded in the local payment table (backward compatible with the legacy WP_ prefix)
+		if (strpos($order_no, 'WP_') === 0 || polypay_get_payment($order_no)) {
 			return $this->process_standalone_callback($order_no, $status, $data);
 		}
 
-		if (strpos($order_no, 'WC_') === 0 && class_exists('WooCommerce')) {
-			// WooCommerce 订单 — 由 WooCommerce 回调处理器处理
+		if (polypay_parse_wc_order_id($order_no) > 0 && class_exists('WooCommerce')) {
+			// WooCommerce order — handled by the WooCommerce callback handler
 			$this->log("WC order, delegating to WC callback");
 			return new WP_REST_Response('OK');
 		}
@@ -312,11 +311,11 @@ class PolyPay_REST_Callback
 	}
 
 	/**
-	 * 处理独立支付回调
+	 * Handle a standalone payment callback
 	 *
-	 * @param string $order_no 订单号
-	 * @param int    $status   状态
-	 * @param array  $data     回调数据
+	 * @param string $order_no Order number
+	 * @param int    $status   Status
+	 * @param array  $data     Callback data
 	 * @return WP_REST_Response
 	 */
 	private function process_standalone_callback($order_no, $status, $data)
@@ -328,7 +327,7 @@ class PolyPay_REST_Callback
 			return new WP_REST_Response('Payment not found', 404);
 		}
 
-		// 已完成的不再处理
+		// Already completed payments are not processed again
 		if ($payment->status == 1) {
 			$this->log("Payment already completed: {$order_no}");
 			return new WP_REST_Response('OK');
@@ -337,24 +336,24 @@ class PolyPay_REST_Callback
 		$tx_hash = $data['tx_hash'] ?? $data['transaction_id'] ?? '';
 
 		switch ($status) {
-			case 2: // 支付成功
-			case 5: // 人工充值
+			case 2: // Payment successful
+			case 5: // Manual deposit
 				polypay_update_payment($order_no, [
 					'status' => 1,
 					'tx_hash' => $tx_hash,
 				]);
 				$this->log("Payment completed: {$order_no}, TX: {$tx_hash}");
 
-				// 触发 WordPress action 钩子
+				// Fire the WordPress action hook
 				do_action('polypay_payment_completed', $payment, $data);
 				break;
 
-			case 3: // 过期
+			case 3: // Expired
 				polypay_update_payment($order_no, ['status' => 2]);
 				do_action('polypay_payment_expired', $payment, $data);
 				break;
 
-			case 4: // 取消
+			case 4: // Cancelled
 				polypay_update_payment($order_no, ['status' => 3]);
 				do_action('polypay_payment_cancelled', $payment, $data);
 				break;
@@ -364,7 +363,7 @@ class PolyPay_REST_Callback
 	}
 
 	/**
-	 * 记录日志
+	 * Write a log entry
 	 *
 	 * @param string $message
 	 */
@@ -381,14 +380,14 @@ class PolyPay_REST_Callback
 	}
 
 	/**
-	 * 验证签名头与防重放。
+	 * Validate signature headers and prevent replay attacks.
 	 *
 	 * @param string $api_key API Key
 	 * @param string $prefix Header: X-Key-Prefix
 	 * @param string $timestamp Header: X-Timestamp
 	 * @param string $nonce Header: X-Nonce
 	 * @param string $signature Header: X-Signature
-	 * @param string $raw_body 原始请求体
+	 * @param string $raw_body Raw request body
 	 * @return true|WP_Error
 	 */
 	private function validate_signature_headers($api_key, $prefix, $timestamp, $nonce, $signature, $raw_body)
@@ -438,10 +437,10 @@ class PolyPay_REST_Callback
 	}
 
 	/**
-	 * 消费 nonce，防重放。
+	 * Consume the nonce to prevent replay attacks.
 	 *
-	 * @param string $timestamp 时间戳
-	 * @param string $nonce 随机串
+	 * @param string $timestamp Timestamp
+	 * @param string $nonce Random string
 	 * @return bool
 	 */
 	private function consume_nonce($timestamp, $nonce)

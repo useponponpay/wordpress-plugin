@@ -1,8 +1,8 @@
 <?php
 /**
- * PolyPay 回调处理器
+ * PolyPay callback handler
  *
- * 处理来自 PolyPay 后端的支付回调通知，更新 WooCommerce 订单状态
+ * Handles payment callback notifications from the PolyPay backend and updates WooCommerce order statuses
  *
  * @package PolyPay_WooCommerce
  * @version 1.0.0
@@ -15,28 +15,28 @@ if (!defined('ABSPATH')) {
 class PolyPay_Callback
 {
 	/**
-	 * 回调鉴权时间窗口（秒）
+	 * Callback authentication time window (seconds)
 	 */
 	const SIGNATURE_WINDOW_SECONDS = 300;
 
 	/**
-	 * 构造函数 - 注册 WooCommerce API 回调
+	 * Constructor - register the WooCommerce API callback
 	 */
 	public function __construct()
 	{
-		// 注册回调端点: /wc-api/polypay
+		// Register the callback endpoint: /wc-api/polypay
 		add_action('woocommerce_api_polypay', [$this, 'handle_callback']);
 	}
 
 	/**
-	 * 处理回调请求
+	 * Handle the callback request
 	 */
 	public function handle_callback()
 	{
 		$logger = wc_get_logger();
 
 		try {
-			// 获取回调数据
+			// Get the callback data
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- The raw request body is required for PolyPay signature verification.
 			$input = file_get_contents('php://input');
 			$logger->info(
@@ -47,16 +47,16 @@ class PolyPay_Callback
 			$data = json_decode($input, true);
 
 			if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
-				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- PolyPay 服务端回调无法携带 WordPress nonce，下面会用签名头校验请求来源。
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- The PolyPay server-side callback cannot carry a WordPress nonce; the request origin is verified below via signature headers.
 				$data = map_deep(wp_unslash($_POST), 'sanitize_text_field');
 			}
 
-			// 对 json_decode 后的数据进行字段级消毒
+			// Sanitize the json_decode result field by field
 			if (is_array($data)) {
 				$data = map_deep($data, 'sanitize_text_field');
 			}
 
-			// 验证必要字段
+			// Validate required fields
 			if (empty($data['order_no']) || empty($data['status'])) {
 				$logger->error('Callback missing required fields: order_no or status', ['source' => 'polypay']);
 				wp_send_json_error('Missing required fields', 400);
@@ -87,15 +87,15 @@ class PolyPay_Callback
 				exit;
 			}
 
-			// 从订单号中提取 WooCommerce 订单 ID
-			// 订单号格式: WC_{order_id}_{hash}
-			if (!preg_match('/^WC_(\d+)_[a-zA-Z0-9]+$/', $data['order_no'], $matches)) {
+			// Extract the WooCommerce order ID from the order number
+			// Order number format: B{shortened merchant ID}_{order_id}, backward compatible with the legacy WC_ prefix format
+			$order_id = polypay_parse_wc_order_id($data['order_no']);
+			if ($order_id <= 0) {
 				$logger->error('Invalid order number format: ' . $data['order_no'], ['source' => 'polypay']);
 				wp_send_json_error('Invalid order number format', 400);
 				return;
 			}
 
-			$order_id = (int) $matches[1];
 			$order = wc_get_order($order_id);
 
 			if (!$order) {
@@ -104,35 +104,35 @@ class PolyPay_Callback
 				return;
 			}
 
-			// 订单已支付，跳过处理
+			// Order already paid; skip processing
 			if ($order->is_paid()) {
 				$logger->info('Order already paid: ' . $order_id, ['source' => 'polypay']);
 				echo 'OK';
 				exit;
 			}
 
-			// 处理不同的支付状态
-			// 1-等待支付，2-支付成功，3-已过期，4-取消支付，5-人工充值
+			// Handle the different payment statuses
+			// 1 - pending payment, 2 - payment successful, 3 - expired, 4 - payment cancelled, 5 - manual deposit
 			$status = absint($data['status']);
 
 			$logger->info("Processing callback for order #{$order_id}, status: {$status}", ['source' => 'polypay']);
 
 			switch ($status) {
-				case 2:  // 支付成功
-				case 5:  // 人工充值
+				case 2:  // Payment successful
+				case 5:  // Manual deposit
 					$this->handle_payment_success($order, $data);
 					break;
 
-				case 1:  // 等待支付
+				case 1:  // Pending payment
 					$logger->info('Payment pending for order: ' . $order_id, ['source' => 'polypay']);
 					break;
 
-				case 3:  // 已过期
+				case 3:  // Expired
 					$order->update_status('cancelled', __('PolyPay: Payment expired.', 'polypay-crypto-payment-gateway'));
 					$logger->info('Payment expired for order: ' . $order_id, ['source' => 'polypay']);
 					break;
 
-				case 4:  // 取消支付
+				case 4:  // Payment cancelled
 					$order->update_status('cancelled', __('PolyPay: Payment cancelled.', 'polypay-crypto-payment-gateway'));
 					$logger->info('Payment cancelled for order: ' . $order_id, ['source' => 'polypay']);
 					break;
@@ -155,22 +155,22 @@ class PolyPay_Callback
 	}
 
 	/**
-	 * 处理支付成功
+	 * Handle a successful payment
 	 *
-	 * @param WC_Order $order WooCommerce 订单
-	 * @param array    $data  回调数据
+	 * @param WC_Order $order WooCommerce order
+	 * @param array    $data  Callback data
 	 */
 	private function handle_payment_success($order, $data)
 	{
 		$logger = wc_get_logger();
 
-		// 获取交易信息
+		// Get transaction information
 		$transaction_id = $data['transaction_id'] ?? $data['tx_hash'] ?? $data['order_no'];
 
-		// 标记订单为已支付
+		// Mark the order as paid
 		$order->payment_complete($transaction_id);
 
-		// 添加订单备注
+		// Add an order note
 		$note = sprintf(
 			/* translators: 1: transaction ID, 2: currency, 3: network */
 			__('PolyPay payment completed. Transaction: %1$s, Currency: %2$s, Network: %3$s', 'polypay-crypto-payment-gateway'),
@@ -180,7 +180,7 @@ class PolyPay_Callback
 		);
 		$order->add_order_note($note);
 
-		// 保存交易详情
+		// Save transaction details
 		$order->update_meta_data('_polypay_tx_hash', $data['tx_hash'] ?? '');
 		$order->update_meta_data('_polypay_payment_amount', $data['amount'] ?? 0);
 		$order->save();
@@ -189,7 +189,7 @@ class PolyPay_Callback
 	}
 
 	/**
-	 * 获取网关实例
+	 * Get the gateway instance
 	 *
 	 * @return PolyPay_Gateway|null
 	 */
@@ -200,14 +200,14 @@ class PolyPay_Callback
 	}
 
 	/**
-	 * 验证签名头与防重放。
+	 * Validate signature headers and prevent replay attacks.
 	 *
 	 * @param string $api_key API Key
 	 * @param string $prefix Header: X-Key-Prefix
 	 * @param string $timestamp Header: X-Timestamp
 	 * @param string $nonce Header: X-Nonce
 	 * @param string $signature Header: X-Signature
-	 * @param string $raw_body 原始请求体
+	 * @param string $raw_body Raw request body
 	 * @return true|WP_Error
 	 */
 	private function validate_signature_headers($api_key, $prefix, $timestamp, $nonce, $signature, $raw_body)
@@ -257,10 +257,10 @@ class PolyPay_Callback
 	}
 
 	/**
-	 * 消费 nonce，防重放。
+	 * Consume the nonce to prevent replay attacks.
 	 *
-	 * @param string $timestamp 时间戳
-	 * @param string $nonce 随机串
+	 * @param string $timestamp Timestamp
+	 * @param string $nonce Random string
 	 * @return bool
 	 */
 	private function consume_nonce($timestamp, $nonce)

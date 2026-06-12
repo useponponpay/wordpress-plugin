@@ -1,8 +1,8 @@
 <?php
 /**
- * PolyPay 短代码
+ * PolyPay shortcode
  *
- * 提供 [polypay_button] 短代码，在任意 WordPress 页面嵌入加密货币支付按钮
+ * Provides the [polypay_button] shortcode to embed a cryptocurrency payment button on any WordPress page
  *
  * @package PolyPay
  * @version 1.0.0
@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) {
 class PolyPay_Shortcode
 {
 	/**
-	 * 构造函数
+	 * Constructor
 	 */
 	public function __construct()
 	{
@@ -23,11 +23,11 @@ class PolyPay_Shortcode
 	}
 
 	/**
-	 * 渲染支付按钮短代码
+	 * Render the payment button shortcode
 	 *
-	 * 用法: [polypay_button amount="100" fiat_currency="USD" description="Premium Plan" button_text="Pay with Crypto" redirect_url="/thank-you"]
+	 * Usage: [polypay_button amount="100" fiat_currency="USD" description="Premium Plan" button_text="Pay with Crypto" redirect_url="/thank-you"]
 	 *
-	 * @param array $atts 短代码属性
+	 * @param array $atts Shortcode attributes
 	 * @return string HTML
 	 */
 	public function render_button($atts)
@@ -40,7 +40,7 @@ class PolyPay_Shortcode
 			'redirect_url' => '',
 		], $atts, 'polypay_button');
 
-		// 金额必填
+		// Amount is required
 		if (empty($atts['amount']) || !is_numeric($atts['amount'])) {
 			if (current_user_can('manage_options')) {
 				return '<p style="color:red;">' . esc_html__('[PolyPay] Error: amount parameter is required.', 'polypay-crypto-payment-gateway') . '</p>';
@@ -48,7 +48,7 @@ class PolyPay_Shortcode
 			return '';
 		}
 
-		// 检查 API Key
+		// Check the API Key
 		$api_key = PolyPay_Settings::get_api_key();
 		if (empty($api_key)) {
 			if (current_user_can('manage_options')) {
@@ -57,7 +57,7 @@ class PolyPay_Shortcode
 			return '';
 		}
 
-		// 生成唯一 ID
+		// Generate a unique ID
 		$unique_id = 'polypay-' . wp_unique_id();
 
 		ob_start();
@@ -75,7 +75,7 @@ class PolyPay_Shortcode
 				<?php endif; ?>
 			</div>
 
-			<!-- 支付按钮 -->
+			<!-- Payment button -->
 			<div class="polypay-step polypay-step-button">
 				<button type="button" class="polypay-btn polypay-btn-primary polypay-pay-btn"
 					data-amount="<?php echo esc_attr($atts['amount']); ?>"
@@ -87,7 +87,7 @@ class PolyPay_Shortcode
 				</button>
 			</div>
 
-			<!-- 处理中 -->
+			<!-- Processing -->
 			<div class="polypay-step polypay-step-processing" style="display:none;">
 				<div class="polypay-loading">
 					<?php esc_html_e('Initializing payment...', 'polypay-crypto-payment-gateway'); ?>

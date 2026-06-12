@@ -1,8 +1,8 @@
 <?php
 /**
- * PolyPay WooCommerce 支付网关
+ * PolyPay WooCommerce payment gateway
  *
- * 继承 WC_Payment_Gateway，实现加密货币支付流程
+ * Extends WC_Payment_Gateway to implement the cryptocurrency payment flow
  *
  * @package PolyPay_WooCommerce
  * @version 1.0.0
@@ -14,11 +14,11 @@ if (!defined('ABSPATH')) {
 
 class PolyPay_Gateway extends WC_Payment_Gateway
 {
-	/** @var PolyPay_API API 客户端实例 */
+	/** @var PolyPay_API API client instance */
 	private $api;
 
 	/**
-	 * 构造函数
+	 * Constructor
 	 */
 	public function __construct()
 	{
@@ -32,28 +32,28 @@ class PolyPay_Gateway extends WC_Payment_Gateway
 		$this->method_description = __('Accept cryptocurrency payments (USDT, USDC, etc.) via PolyPay. Supports Tron, Ethereum, BSC, Polygon, Solana networks.', 'polypay-crypto-payment-gateway');
 		$this->supports = ['products'];
 
-		// 加载设置
+		// Load settings
 		$this->init_form_fields();
 		$this->init_settings();
 
-		// 用户配置
+		// User configuration
 		$this->title = $this->get_option('title', __('Crypto Payment (PolyPay)', 'polypay-crypto-payment-gateway'));
 		$this->description = $this->get_option('description', __('Pay with USDT, USDC and other cryptocurrencies via PolyPay.', 'polypay-crypto-payment-gateway'));
 		$this->enabled = $this->get_option('enabled', 'no');
 
-		// 初始化 API 客户端
+		// Initialize the API client
 		$api_key = $this->get_option('api_key');
 		if ($api_key) {
 			$this->api = new PolyPay_API($api_key);
 		}
 
-		// 保存管理后台设置
+		// Save admin settings
 		add_action('woocommerce_update_options_payment_gateways_' . $this->id, [$this, 'process_admin_options']);
 		add_action('woocommerce_update_options_payment_gateways_' . $this->id, [$this, 'validate_api_key']);
 	}
 
 	/**
-	 * 定义管理后台配置字段
+	 * Define the admin configuration fields
 	 */
 	public function init_form_fields()
 	{
@@ -88,11 +88,18 @@ class PolyPay_Gateway extends WC_Payment_Gateway
 				),
 				'default' => '',
 			],
+			'mch_id' => [
+				'title' => __('Merchant ID', 'polypay-crypto-payment-gateway'),
+				'type' => 'text',
+				'description' => __('Merchant ID from the PolyPay console (e.g. MCH17790986189696). Used as a short prefix of the merchant order number; falls back to an API Key derived identifier when empty.', 'polypay-crypto-payment-gateway'),
+				'default' => '',
+				'desc_tip' => true,
+			],
 		];
 	}
 
 	/**
-	 * 验证 API Key（保存设置时触发）
+	 * Validate the API Key (triggered when settings are saved)
 	 */
 	public function validate_api_key()
 	{
@@ -123,9 +130,9 @@ class PolyPay_Gateway extends WC_Payment_Gateway
 	}
 
 	/**
-	 * 处理支付
+	 * Process the payment
 	 *
-	 * @param int $order_id WooCommerce 订单 ID
+	 * @param int $order_id WooCommerce order ID
 	 * @return array
 	 */
 	public function process_payment($order_id)
@@ -138,19 +145,20 @@ class PolyPay_Gateway extends WC_Payment_Gateway
 		}
 
 		try {
-			// 更新订单状态为等待支付
+			// Update the order status to pending payment
 			$order->update_status('pending', __('Awaiting PolyPay crypto payment.', 'polypay-crypto-payment-gateway'));
 
-			// 组合独立的收银台 URL
-			$checkout_url = polypay_build_checkout_url('WC_' . $order_id, $order->get_order_key());
+			// Build the standalone checkout URL (order number format: B{shortened merchant ID}_{order_id})
+			$order_no = polypay_build_wc_order_no($order_id);
+			$checkout_url = polypay_build_checkout_url($order_no, $order->get_order_key());
 
-			// 日志记录
-			$this->log('Redirecting WC order to PolyPay checkout: WC_' . $order_id);
+			// Log the action
+			$this->log('Redirecting WC order to PolyPay checkout: ' . $order_no);
 
-			// 清空购物车
+			// Empty the cart
 			WC()->cart->empty_cart();
 
-			// 跳转到支付选择页面
+			// Redirect to the payment method selection page
 			return [
 				'result' => 'success',
 				'redirect' => $checkout_url,
@@ -164,7 +172,7 @@ class PolyPay_Gateway extends WC_Payment_Gateway
 	}
 
 	/**
-	 * 检查网关是否可用
+	 * Check whether the gateway is available
 	 *
 	 * @return bool
 	 */
@@ -174,7 +182,7 @@ class PolyPay_Gateway extends WC_Payment_Gateway
 			return false;
 		}
 
-		// API Key 必须配置
+		// The API Key must be configured
 		if (empty($this->get_option('api_key'))) {
 			return false;
 		}
@@ -183,7 +191,7 @@ class PolyPay_Gateway extends WC_Payment_Gateway
 	}
 
 	/**
-	 * 管理后台 - 订单详情页显示支付信息
+	 * Admin - display payment information on the order details page
 	 *
 	 * @param WC_Order $order
 	 */
@@ -201,10 +209,10 @@ class PolyPay_Gateway extends WC_Payment_Gateway
 	}
 
 	/**
-	 * 记录日志
+	 * Write a log entry
 	 *
-	 * @param string $message 日志消息
-	 * @param string $level   日志级别
+	 * @param string $message Log message
+	 * @param string $level   Log level
 	 */
 	public function log($message, $level = 'info')
 	{

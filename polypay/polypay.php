@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-// 插件常量
+// Plugin constants
 if (!defined('POLYPAY_VERSION')) {
 	define('POLYPAY_VERSION', '1.0.0');
 }
@@ -29,28 +29,28 @@ if (!defined('POLYPAY_PLUGIN_URL')) {
 	define('POLYPAY_PLUGIN_URL', plugin_dir_url(__FILE__));
 }
 if (!defined('POLYPAY_API_URL')) {
-	// 默认使用生产 API，可通过常量或 filter 覆盖，这里为了测试阶段改为本地
+	// Defaults to the production API; can be overridden via constant or filter. Switched to local for the testing phase.
 	define('POLYPAY_API_URL', apply_filters('polypay_api_url', 'https://api.polypay.ai'));
 	// define('POLYPAY_API_URL', apply_filters('polypay_api_url', 'http://localhost:11050'));
 }
 
 /**
- * 插件初始化
+ * Plugin initialization
  */
 function polypay_init()
 {
-	// 加载核心类（不依赖 WooCommerce）
+	// Load core classes (not dependent on WooCommerce)
 	require_once POLYPAY_PLUGIN_DIR . 'includes/class-polypay-api.php';
 	require_once POLYPAY_PLUGIN_DIR . 'includes/class-polypay-settings.php';
 	require_once POLYPAY_PLUGIN_DIR . 'includes/class-polypay-shortcode.php';
 	require_once POLYPAY_PLUGIN_DIR . 'includes/class-polypay-rest-callback.php';
 
-	// 初始化核心组件
+	// Initialize core components
 	new PolyPay_Settings();
 	new PolyPay_Shortcode();
 	new PolyPay_REST_Callback();
 
-	// WooCommerce 集成（可选）
+	// WooCommerce integration (optional)
 	if (class_exists('WooCommerce')) {
 		require_once POLYPAY_PLUGIN_DIR . 'includes/class-polypay-gateway.php';
 		require_once POLYPAY_PLUGIN_DIR . 'includes/class-polypay-callback.php';
@@ -60,10 +60,10 @@ function polypay_init()
 add_action('plugins_loaded', 'polypay_init');
 
 /**
- * 生成收银台访问令牌。
+ * Generate the checkout access token.
  *
- * @param string $order_id 订单号
- * @param string $secret   附加密钥
+ * @param string $order_id Order number
+ * @param string $secret   Additional secret
  * @return string
  */
 function polypay_create_checkout_token($order_id, $secret = '')
@@ -73,10 +73,10 @@ function polypay_create_checkout_token($order_id, $secret = '')
 }
 
 /**
- * 构造收银台 URL。
+ * Build the checkout URL.
  *
- * @param string $order_id 订单号
- * @param string $secret   附加密钥
+ * @param string $order_id Order number
+ * @param string $secret   Additional secret
  * @return string
  */
 function polypay_build_checkout_url($order_id, $secret = '')
@@ -88,7 +88,75 @@ function polypay_build_checkout_url($order_id, $secret = '')
 }
 
 /**
- * 获取 PolyPay 支付记录表名。
+ * Generate the shortened merchant ID identifier.
+ *
+ * Strips the MCH prefix and takes the last 6 characters; when no merchant ID
+ * is configured, falls back to a stable 6-character identifier derived from
+ * the API Key. Reads the WooCommerce gateway settings first, then the
+ * standalone settings page configuration.
+ *
+ * @return string
+ */
+function polypay_merchant_short_id()
+{
+	$wc_options = get_option('woocommerce_polypay_settings', []);
+	$mch_id = trim((string)($wc_options['mch_id'] ?? ''));
+	if ($mch_id === '' && class_exists('PolyPay_Settings')) {
+		$mch_id = trim((string)PolyPay_Settings::get_mch_id());
+	}
+
+	$short = substr((string)preg_replace('/^MCH/', '', strtoupper($mch_id)), -6);
+	if ($short === '' || $short === false) {
+		$api_key = trim((string)($wc_options['api_key'] ?? ''));
+		if ($api_key === '' && class_exists('PolyPay_Settings')) {
+			$api_key = (string)PolyPay_Settings::get_api_key();
+		}
+		$short = strtoupper(substr(md5($api_key), 0, 6));
+	}
+
+	return $short;
+}
+
+/**
+ * Generate the merchant order number for a WooCommerce order.
+ *
+ * Format: B{shortened merchant ID}_{order_id}, e.g. B189696_55.
+ * The first letter is the order source identifier: P = PolyPay platform,
+ * other plugins follow in sequence: A = WHMCS, B = WordPress (WooCommerce),
+ * C = Shopify, and so on.
+ *
+ * @param int|string $wc_order_id WooCommerce order ID
+ * @return string
+ */
+function polypay_build_wc_order_no($wc_order_id)
+{
+	return 'B' . polypay_merchant_short_id() . '_' . $wc_order_id;
+}
+
+/**
+ * Parse the WooCommerce order ID from a merchant order number.
+ *
+ * Supports the new format B{shortened merchant ID}_{order_id}, and is
+ * backward compatible with the legacy formats WC_{order_id} and
+ * WC_{order_id}_{hash}. Returns 0 if parsing fails.
+ *
+ * @param string $order_no Merchant order number
+ * @return int
+ */
+function polypay_parse_wc_order_id($order_no)
+{
+	if (preg_match('/^B[A-Za-z0-9]+_(\d+)$/', (string)$order_no, $matches)) {
+		return (int)$matches[1];
+	}
+	if (preg_match('/^WC_(\d+)(?:_[a-zA-Z0-9]+)?$/', (string)$order_no, $matches)) {
+		return (int)$matches[1];
+	}
+
+	return 0;
+}
+
+/**
+ * Get the PolyPay payment record table name.
  *
  * @return string
  */
@@ -100,9 +168,9 @@ function polypay_payments_table()
 }
 
 /**
- * 获取支付记录缓存键。
+ * Get the payment record cache key.
  *
- * @param string $order_id 订单号
+ * @param string $order_id Order number
  * @return string
  */
 function polypay_payment_cache_key($order_id)
@@ -111,9 +179,9 @@ function polypay_payment_cache_key($order_id)
 }
 
 /**
- * 查询 PolyPay 支付记录。
+ * Query a PolyPay payment record.
  *
- * @param string $order_id 订单号
+ * @param string $order_id Order number
  * @return object|null
  */
 function polypay_get_payment($order_id)
@@ -132,9 +200,9 @@ function polypay_get_payment($order_id)
 	}
 
 	$table = esc_sql(polypay_payments_table());
-	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,PluginCheck.Security.DirectDB.UnescapedDBParameter -- 自定义插件表名固定且来自 $wpdb->prefix，字段值仍通过 prepare() 绑定。
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,PluginCheck.Security.DirectDB.UnescapedDBParameter -- The custom plugin table name is fixed and derived from $wpdb->prefix; field values are still bound via prepare().
 	$payment = $wpdb->get_row(
-		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- WordPress 6.1 及以下不支持 %i，占位值仅用于 order_id，表名已通过 esc_sql() 处理。
+		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- WordPress 6.1 and below do not support %i; the placeholder is only used for order_id, and the table name has been escaped via esc_sql().
 		$wpdb->prepare(
 			'SELECT * FROM ' . $table . ' WHERE order_id = %s',
 			$order_id
@@ -148,9 +216,9 @@ function polypay_get_payment($order_id)
 }
 
 /**
- * 清理支付记录缓存。
+ * Clear the payment record cache.
  *
- * @param string $order_id 订单号
+ * @param string $order_id Order number
  */
 function polypay_delete_payment_cache($order_id)
 {
@@ -158,9 +226,9 @@ function polypay_delete_payment_cache($order_id)
 }
 
 /**
- * 新增 PolyPay 支付记录。
+ * Insert a new PolyPay payment record.
  *
- * @param array $data 支付记录数据
+ * @param array $data Payment record data
  * @return int|false
  */
 function polypay_insert_payment($data)
@@ -168,7 +236,7 @@ function polypay_insert_payment($data)
 	global $wpdb;
 
 	$table = polypay_payments_table();
-	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- 写入自定义插件表，WordPress 没有对应的高级 API。
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Writes to a custom plugin table; WordPress has no corresponding high-level API.
 	$result = $wpdb->insert($table, $data);
 
 	if (!empty($data['order_id'])) {
@@ -179,10 +247,10 @@ function polypay_insert_payment($data)
 }
 
 /**
- * 更新 PolyPay 支付记录。
+ * Update a PolyPay payment record.
  *
- * @param string $order_id 订单号
- * @param array  $data     更新数据
+ * @param string $order_id Order number
+ * @param array  $data     Data to update
  * @return int|false
  */
 function polypay_update_payment($order_id, $data)
@@ -195,7 +263,7 @@ function polypay_update_payment($order_id, $data)
 	}
 
 	$table = polypay_payments_table();
-	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- 更新自定义插件表，且会立即清理对象缓存。
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Updates a custom plugin table, and the object cache is cleared immediately afterwards.
 	$result = $wpdb->update($table, $data, ['order_id' => $order_id]);
 
 	polypay_delete_payment_cache($order_id);
@@ -204,7 +272,7 @@ function polypay_update_payment($order_id, $data)
 }
 
 /**
- * 注册 WooCommerce 支付网关（仅在 WooCommerce 可用时）
+ * Register the WooCommerce payment gateway (only when WooCommerce is available)
  */
 function polypay_add_wc_gateway($gateways)
 {
@@ -216,7 +284,7 @@ function polypay_add_wc_gateway($gateways)
 add_filter('woocommerce_payment_gateways', 'polypay_add_wc_gateway');
 
 /**
- * 在插件列表中添加设置链接
+ * Add a settings link to the plugin list
  */
 function polypay_plugin_links($links)
 {
@@ -228,9 +296,9 @@ function polypay_plugin_links($links)
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'polypay_plugin_links');
 
 /**
- * 检查文本中是否包含 PolyPay 短代码。
+ * Check whether the text contains a PolyPay shortcode.
  *
- * @param string $content 文本内容
+ * @param string $content Text content
  * @return bool
  */
 function polypay_has_shortcode($content)
@@ -239,7 +307,7 @@ function polypay_has_shortcode($content)
 }
 
 /**
- * 检查当前查询结果中是否包含 PolyPay 短代码。
+ * Check whether the current query results contain a PolyPay shortcode.
  *
  * @return bool
  */
@@ -265,9 +333,9 @@ function polypay_current_query_has_shortcode()
 }
 
 /**
- * 在摘要中执行 PolyPay 短代码。
+ * Execute PolyPay shortcodes within the excerpt.
  *
- * @param string $excerpt 摘要内容
+ * @param string $excerpt Excerpt content
  * @return string
  */
 function polypay_render_shortcode_in_excerpt($excerpt)
@@ -281,11 +349,11 @@ function polypay_render_shortcode_in_excerpt($excerpt)
 add_filter('get_the_excerpt', 'polypay_render_shortcode_in_excerpt', 12);
 
 /**
- * 加载前端资源
+ * Load front-end assets
  */
 function polypay_enqueue_scripts()
 {
-	// 仅在包含短代码的页面或结账页加载
+	// Only load on pages containing the shortcode or on the checkout page
 	global $post;
 	$load = false;
 
@@ -328,7 +396,7 @@ function polypay_enqueue_scripts()
 add_action('wp_enqueue_scripts', 'polypay_enqueue_scripts');
 
 /**
- * 插件激活 - 创建支付记录表
+ * Plugin activation - create the payment record table
  */
 function polypay_activate()
 {
@@ -365,7 +433,7 @@ function polypay_activate()
 register_activation_hook(__FILE__, 'polypay_activate');
 
 /**
- * 声明 WooCommerce HPOS 兼容（可选）
+ * Declare WooCommerce HPOS compatibility (optional)
  */
 add_action('before_woocommerce_init', function () {
 	if (class_exists(\Automattic\WooCommerce\Utilities\FeaturesUtil::class)) {
@@ -374,7 +442,7 @@ add_action('before_woocommerce_init', function () {
 });
 
 /**
- * 注册自定义 Query Var
+ * Register custom query vars
  */
 add_filter('query_vars', function ($vars) {
 	$vars[] = 'polypay_checkout';
@@ -383,7 +451,7 @@ add_filter('query_vars', function ($vars) {
 });
 
 /**
- * 模板重定向：当检测到 polypay_checkout 时加载独立收银台
+ * Template redirect: load the standalone checkout when polypay_checkout is detected
  */
 add_action('template_redirect', function () {
 	$order_id = get_query_var('polypay_checkout');

@@ -1,8 +1,8 @@
 <?php
 /**
- * PolyPay 独立支付选择页面模板
+ * PolyPay standalone payment method selection page template
  *
- * 当访问 /?polypay_checkout=<order_id> 时渲染此页面。
+ * Rendered when /?polypay_checkout=<order_id> is visited.
  *
  * @package PolyPay
  */
@@ -46,9 +46,9 @@ $polypay_redirect_url = home_url();
 $polypay_expected_token = '';
 
 if (!$polypay_payment) {
-	// 检查是否为 WooCommerce 订单
-	if (strpos($polypay_order_id, 'WC_') === 0 && class_exists('WC_Order')) {
-		$polypay_wc_order_id = str_replace('WC_', '', $polypay_order_id);
+	// Check whether this is a WooCommerce order (B{shortened merchant ID}_{order_id}, backward compatible with the legacy WC_ prefix)
+	$polypay_wc_order_id = polypay_parse_wc_order_id($polypay_order_id);
+	if ($polypay_wc_order_id > 0 && class_exists('WC_Order')) {
 		$polypay_wc_order = wc_get_order($polypay_wc_order_id);
 		if (!$polypay_wc_order) {
 			wp_die(esc_html($polypay_i18n['order_not_found']));
@@ -62,10 +62,10 @@ if (!$polypay_payment) {
 		$polypay_description = sprintf(__('Order #%s', 'polypay-crypto-payment-gateway'), $polypay_wc_order->get_order_number());
 		$polypay_redirect_url = $polypay_wc_order->get_checkout_order_received_url();
 
-		// 检查是否已经标记了 payment_url（说明已经创建过后台订单）
+		// Check whether payment_url has already been recorded (meaning a backend order was already created)
 		$polypay_existing_payment_url = $polypay_wc_order->get_meta('_polypay_payment_url');
 		if ($polypay_existing_payment_url) {
-			// 保持在当前收银台页面，由用户手动点击确认支付。
+			// Stay on the current checkout page; the user confirms payment manually.
 		}
 	} else {
 		wp_die(esc_html($polypay_i18n['order_not_found']));
@@ -73,7 +73,7 @@ if (!$polypay_payment) {
 } else {
 	$polypay_expected_token = polypay_create_checkout_token($polypay_order_id);
 	if ($polypay_payment->status > 0 && !empty($polypay_payment->payment_url)) {
-		// 已有 payment_url 时也不自动跳转，保持当前页面交互。
+		// Do not auto-redirect even when payment_url already exists; keep the interaction on the current page.
 	}
 	$polypay_amount = $polypay_payment->amount;
 	$polypay_fiat_currency = $polypay_payment->fiat_currency;
@@ -85,11 +85,11 @@ if (empty($polypay_checkout_token) || empty($polypay_expected_token) || !hash_eq
 	wp_die(esc_html($polypay_i18n['invalid_request']));
 }
 
-// 提取当前 REST API 基础路径和 nonce 给前端 JS 调用
+// Extract the current REST API base path and nonce for front-end JS calls
 $polypay_rest_url = esc_url_raw(rest_url('polypay/v1/'));
 $polypay_nonce = wp_create_nonce('wp_rest');
 
-// 注册并入队收银台专用样式和脚本
+// Register and enqueue checkout-specific styles and scripts
 wp_enqueue_style(
 	'polypay-checkout-style',
 	POLYPAY_PLUGIN_URL . 'assets/css/polypay-checkout.css',

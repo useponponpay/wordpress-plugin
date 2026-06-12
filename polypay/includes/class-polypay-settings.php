@@ -1,8 +1,8 @@
 <?php
 /**
- * PolyPay 独立设置页
+ * PolyPay standalone settings page
  *
- * 通过 WordPress Settings API 提供管理后台配置页面，不依赖 WooCommerce
+ * Provides an admin configuration page via the WordPress Settings API, without depending on WooCommerce
  *
  * @package PolyPay
  * @version 1.0.0
@@ -14,14 +14,14 @@ if (!defined('ABSPATH')) {
 
 class PolyPay_Settings
 {
-	/** @var string 选项组 */
+	/** @var string Option group */
 	private $option_group = 'polypay_settings';
 
-	/** @var string 选项名 */
+	/** @var string Option name */
 	private $option_name = 'polypay_options';
 
 	/**
-	 * 构造函数
+	 * Constructor
 	 */
 	public function __construct()
 	{
@@ -30,7 +30,7 @@ class PolyPay_Settings
 	}
 
 	/**
-	 * 添加设置页到 WordPress 管理菜单
+	 * Add the settings page to the WordPress admin menu
 	 */
 	public function add_settings_page()
 	{
@@ -44,7 +44,7 @@ class PolyPay_Settings
 	}
 
 	/**
-	 * 注册设置项
+	 * Register settings
 	 */
 	public function register_settings()
 	{
@@ -52,7 +52,7 @@ class PolyPay_Settings
 			'sanitize_callback' => [$this, 'sanitize_options'],
 		]);
 
-		// API 配置段
+		// API configuration section
 		add_settings_section(
 			'polypay_api_section',
 			__('API Configuration', 'polypay-crypto-payment-gateway'),
@@ -71,7 +71,15 @@ class PolyPay_Settings
 			'polypay_api_section'
 		);
 
-		// 短代码使用说明段
+		add_settings_field(
+			'mch_id',
+			__('Merchant ID', 'polypay-crypto-payment-gateway'),
+			[$this, 'render_mch_id_field'],
+			'polypay',
+			'polypay_api_section'
+		);
+
+		// Shortcode usage instructions section
 		add_settings_section(
 			'polypay_shortcode_section',
 			__('Shortcode Usage', 'polypay-crypto-payment-gateway'),
@@ -81,7 +89,7 @@ class PolyPay_Settings
 	}
 
 	/**
-	 * 渲染 API Key 输入框
+	 * Render the API Key input field
 	 */
 	public function render_api_key_field()
 	{
@@ -103,7 +111,23 @@ class PolyPay_Settings
 	}
 
 	/**
-	 * 渲染短代码使用说明
+	 * Render the merchant ID input field
+	 */
+	public function render_mch_id_field()
+	{
+		$options = get_option($this->option_name, []);
+		$mch_id = $options['mch_id'] ?? '';
+		?>
+		<input type="text" name="<?php echo esc_attr($this->option_name); ?>[mch_id]" value="<?php echo esc_attr($mch_id); ?>"
+			class="regular-text" placeholder="MCH17790986189696" />
+		<p class="description">
+			<?php esc_html_e('Merchant ID from the PolyPay console. Used as a short prefix of the merchant order number; falls back to an API Key derived identifier when empty.', 'polypay-crypto-payment-gateway'); ?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Render the shortcode usage instructions
 	 */
 	public function render_shortcode_help()
 	{
@@ -187,7 +211,7 @@ class PolyPay_Settings
 	}
 
 	/**
-	 * 渲染设置页面
+	 * Render the settings page
 	 */
 	public function render_settings_page()
 	{
@@ -222,7 +246,7 @@ class PolyPay_Settings
 	}
 
 	/**
-	 * 清理和验证选项
+	 * Sanitize and validate options
 	 *
 	 * @param array $input
 	 * @return array
@@ -231,11 +255,12 @@ class PolyPay_Settings
 	{
 		$sanitized = [];
 		$sanitized['api_key'] = sanitize_text_field($input['api_key'] ?? '');
+		$sanitized['mch_id'] = sanitize_text_field($input['mch_id'] ?? '');
 
-		// 防止 WordPress 多次调用 sanitize_callback 导致重复验证
+		// Prevent duplicate validation caused by WordPress calling sanitize_callback multiple times
 		static $validated = false;
 
-		// 验证 API Key
+		// Validate the API Key
 		if (!empty($sanitized['api_key']) && !$validated) {
 			$validated = true;
 			$api = new PolyPay_API($sanitized['api_key']);
@@ -286,10 +311,10 @@ class PolyPay_Settings
 	}
 
 	/**
-	 * 记录 API Key 校验失败日志
+	 * Log an API Key validation failure
 	 *
-	 * @param string $type    失败类型
-	 * @param array  $payload 上下文数据
+	 * @param string $type    Failure type
+	 * @param array  $payload Context data
 	 * @return void
 	 */
 	private function log_api_key_validation_failure($type, $payload)
@@ -314,7 +339,7 @@ class PolyPay_Settings
 	}
 
 	/**
-	 * 获取 API Key
+	 * Get the API Key
 	 *
 	 * @return string
 	 */
@@ -322,5 +347,16 @@ class PolyPay_Settings
 	{
 		$options = get_option('polypay_options', []);
 		return $options['api_key'] ?? '';
+	}
+
+	/**
+	 * Get the merchant ID
+	 *
+	 * @return string
+	 */
+	public static function get_mch_id()
+	{
+		$options = get_option('polypay_options', []);
+		return $options['mch_id'] ?? '';
 	}
 }

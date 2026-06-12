@@ -1,8 +1,8 @@
 <?php
 /**
- * PolyPay API 客户端
+ * PolyPay API client
  *
- * 封装与 PolyPay 后端 API 的所有交互
+ * Encapsulates all interactions with the PolyPay backend API
  *
  * @package PolyPay_WooCommerce
  * @version 1.0.0
@@ -14,24 +14,24 @@ if (!defined('ABSPATH')) {
 
 class PolyPay_API
 {
-	/** @var string API 基础 URL */
+	/** @var string API base URL */
 	private $api_url;
 
 	/** @var string API Key */
 	private $api_key;
 
-	/** @var int 请求超时时间（秒） */
+	/** @var int Request timeout in seconds */
 	private $timeout;
 
-	/** @var array 最近一次请求调试上下文 */
+	/** @var array Debug context of the most recent request */
 	private $last_debug_context = [];
 
 	/**
-	 * 构造函数
+	 * Constructor
 	 *
 	 * @param string $api_key API Key
-	 * @param string $api_url API 基础 URL
-	 * @param int    $timeout 超时时间
+	 * @param string $api_url API base URL
+	 * @param int    $timeout Timeout in seconds
 	 */
 	public function __construct($api_key, $api_url = '', $timeout = 30)
 	{
@@ -41,7 +41,7 @@ class PolyPay_API
 	}
 
 	/**
-	 * 获取商户支持的支付方式
+	 * Get the payment methods supported by the merchant
 	 *
 	 * @return array|WP_Error
 	 */
@@ -51,9 +51,9 @@ class PolyPay_API
 	}
 
 	/**
-	 * 创建支付订单
+	 * Create a payment order
 	 *
-	 * @param array $params 订单参数
+	 * @param array $params Order parameters
 	 * @return array|WP_Error
 	 */
 	public function create_order($params)
@@ -62,10 +62,10 @@ class PolyPay_API
 	}
 
 	/**
-	 * 查询订单详情
+	 * Query order details
 	 *
-	 * @param string $trade_id   交易ID
-	 * @param string $mch_order_id 商户订单号
+	 * @param string $trade_id   Transaction ID
+	 * @param string $mch_order_id Merchant order number
 	 * @return array|WP_Error
 	 */
 	public function get_order_detail($trade_id = '', $mch_order_id = '')
@@ -81,7 +81,7 @@ class PolyPay_API
 	}
 
 	/**
-	 * 激活插件
+	 * Activate the plugin
 	 *
 	 * @return array|WP_Error
 	 */
@@ -93,7 +93,7 @@ class PolyPay_API
 	}
 
 	/**
-	 * 获取日志文件路径
+	 * Get the log file path
 	 *
 	 * @return string
 	 */
@@ -122,7 +122,7 @@ class PolyPay_API
 	}
 
 	/**
-	 * 获取最近一次请求调试上下文
+	 * Get the debug context of the most recent request
 	 *
 	 * @return array
 	 */
@@ -132,10 +132,10 @@ class PolyPay_API
 	}
 
 	/**
-	 * 发送 API 请求
+	 * Send an API request
 	 *
-	 * @param string $endpoint API 端点
-	 * @param array  $data     请求数据
+	 * @param string $endpoint API endpoint
+	 * @param array  $data     Request data
 	 * @return array|WP_Error
 	 */
 	private function request($endpoint, $data = [])
@@ -218,9 +218,9 @@ class PolyPay_API
 	}
 
 	/**
-	 * 写调试日志
+	 * Write a debug log entry
 	 *
-	 * @param string $message 日志内容
+	 * @param string $message Log message
 	 * @return void
 	 */
 	private function write_debug_log($message)
