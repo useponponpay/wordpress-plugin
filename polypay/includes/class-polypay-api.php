@@ -89,6 +89,8 @@ class PolyPay_API
 	{
 		return $this->request('/api/v1/pay/sdk/plugin/activate', [
 			'plugin_type' => 'wordpress',
+			'plugin_version' => defined('POLYPAY_VERSION') ? POLYPAY_VERSION : '',
+			'platform_version' => function_exists('get_bloginfo') ? get_bloginfo('version') : '',
 		]);
 	}
 
