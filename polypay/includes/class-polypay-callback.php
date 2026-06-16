@@ -165,7 +165,7 @@ class PolyPay_Callback
 		$logger = wc_get_logger();
 
 		// Get transaction information
-		$transaction_id = $data['transaction_id'] ?? $data['tx_hash'] ?? $data['order_no'];
+		$transaction_id = $data['transaction_id'] ?? $data['hash'] ?? $data['tx_hash'] ?? $data['order_no'];
 
 		// Mark the order as paid
 		$order->payment_complete($transaction_id);
@@ -181,7 +181,7 @@ class PolyPay_Callback
 		$order->add_order_note($note);
 
 		// Save transaction details
-		$order->update_meta_data('_polypay_tx_hash', $data['tx_hash'] ?? '');
+		$order->update_meta_data('_polypay_tx_hash', $data['hash'] ?? $data['tx_hash'] ?? '');
 		$order->update_meta_data('_polypay_payment_amount', $data['amount'] ?? 0);
 		$order->save();
 

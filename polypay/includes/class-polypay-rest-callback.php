@@ -333,7 +333,7 @@ class PolyPay_REST_Callback
 			return new WP_REST_Response('OK');
 		}
 
-		$tx_hash = $data['tx_hash'] ?? $data['transaction_id'] ?? '';
+		$tx_hash = $data['hash'] ?? $data['tx_hash'] ?? $data['transaction_id'] ?? '';
 
 		switch ($status) {
 			case 2: // Payment successful
